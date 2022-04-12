@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="me.shetj.logkit.debug">
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <application>
+        <activity
+            android:name=".LogDesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LogFilesActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>
