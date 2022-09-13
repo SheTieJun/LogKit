@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="#000"
         android:padding="10dp"
-        android:text="这是日志"
+        android:text="LogKit"
         android:textColor="#FFF"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,6 +34,18 @@
         android:src="@drawable/ic_baseline_cleaning_services_24"
         app:layout_constraintBottom_toBottomOf="@id/title"/>
 
+    <TextView
+        android:id="@+id/look"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/clean"
+        app:layout_constraintEnd_toStartOf="@id/clean"
+        android:layout_marginEnd="10dp"
+        android:text="查看"
+        android:textColor="#FFF"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/clean"/>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/NestedScrollView"
         android:layout_width="match_parent"
@@ -47,7 +59,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:textIsSelectable="true"
             android:textColor="#23FB23" />
 
     </androidx.core.widget.NestedScrollView>

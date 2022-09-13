@@ -27,15 +27,23 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.arch.core.executor.ArchTaskExecutor
-import java.io.BufferedWriter
+import androidx.lifecycle.Lifecycle.Event
+import androidx.lifecycle.Lifecycle.Event.ON_RESUME
+import androidx.lifecycle.Lifecycle.Event.ON_STOP
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import java.io.File
-import java.io.FileWriter
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import me.shetj.logkit.debug.floatview.FloatKit.checkFloatPermission
+
+
+val lineString: String? = System.getProperty("line.separator")
 
 /**
  * debug 功能扩展 必须开启debug的情况下
@@ -46,7 +54,7 @@ class DebugFunc private constructor() {
 
     private var mContext: WeakReference<Context>? = null
     private val list: CopyOnWriteArrayList<LogCurrentCall> = CopyOnWriteArrayList()
-    private var logView:LogView ?= null
+    private var logView: LogView? = null
 
     companion object {
 
@@ -55,11 +63,14 @@ class DebugFunc private constructor() {
 
         @JvmStatic
         fun getInstance(): DebugFunc {
-            return mDebugFunc ?: DebugFunc().also {
-                mDebugFunc = it
+            return mDebugFunc ?: synchronized(DebugFunc::class.java) {
+                DebugFunc().also {
+                    mDebugFunc = it
+                }
             }
         }
     }
+
 
     //region 必须设置
     fun initContext(context: Context): Boolean {
@@ -68,34 +79,53 @@ class DebugFunc private constructor() {
     }
     //endregion
 
-    fun addCall(logCurrentCall: LogCurrentCall){
+    fun addCall(logCurrentCall: LogCurrentCall) {
         list.add(logCurrentCall)
     }
 
-    fun remove(logCurrentCall: LogCurrentCall){
+    fun remove(logCurrentCall: LogCurrentCall) {
         list.remove(logCurrentCall)
     }
 
-    fun saveLogToFile(info: String?) {
-        list.forEach { logCurrentCall ->
-            logCurrentCall.log(info)
+    /**
+     * Log and to file
+     * 记录并归档
+     * @param log 日志信息
+     * @param isSave 是否归档
+     * @param isCall 是否在view中显示
+     */
+    fun logAndToFile(log: String, isSave: Boolean = true, isCall: Boolean = true) {
+        Log.i("DebugFunc", log)
+        if (isCall) {
+            list.forEach { logCurrentCall ->
+                logCurrentCall.log(log)
+            }
         }
-        outputToFile(info, getTodayLogFile())
+        if (isSave) {
+            saveLogToFile(log)
+        }
+    }
+
+    /**
+     * Save log to file
+     * 将日志保存到文件
+     * @param log
+     */
+    fun saveLogToFile(log: String) {
+        outputToFile(log, getTodayLogFile())
     }
 
     fun addFlotLogView() {
-        if (mContext?.get()?.checkFloatPermission(true) == true){
+        if (mContext?.get()?.checkFloatPermission(true) == true) {
             mContext?.get()?.let {
-                if (logView == null){
-                    logView =   LogView(it)
+                if (logView == null) {
+                    logView = LogView(it)
                 }
-                logView?.apply {
-
-                }?.addToWindowManager {
+                logView?.addToWindowManager {
                     x = 0
                     y = 0
-                    width = 250*3
-                    height = 250*3
+                    width = 250 * 3
+                    height = 250 * 3
                 }
             }
         }
@@ -105,9 +135,9 @@ class DebugFunc private constructor() {
         logView?.removeForWindowManager()
     }
 
-    fun startLogsActivity(){
+    fun startLogsActivity() {
         mContext?.get()?.let {
-            it.startActivity(Intent(it,LogFilesActivity::class.java).apply {
+            it.startActivity(Intent(it, LogFilesActivity::class.java).apply {
                 addFlags(FLAG_ACTIVITY_NEW_TASK)
             })
         }
@@ -121,7 +151,7 @@ class DebugFunc private constructor() {
             if (info.isNullOrEmpty()) return@execute
             if (path.isNullOrEmpty()) return@execute
             try {
-                File(path).appendText("$info \n")
+                File(path).appendText("$info$lineString")
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -148,10 +178,23 @@ class DebugFunc private constructor() {
 
 
     private fun today(): String {
-        return SimpleDateFormat("yyyy-MM-dd HH时mm分").format(Date()).toString()
+        return SimpleDateFormat("yyyy-MM-dd HH时mm分", Locale.getDefault()).format(Date()).toString()
     }
 
+}
 
+
+fun AppCompatActivity.showDebugView() {
+    lifecycle.addObserver(object : LifecycleEventObserver {
+        override fun onStateChanged(source: LifecycleOwner, event: Event) {
+            if (event == ON_RESUME) {
+                DebugFunc.getInstance().addFlotLogView()
+            }
+            if (event == ON_STOP) {
+                DebugFunc.getInstance().removeFlotLogView()
+            }
+        }
+    })
 }
 
 

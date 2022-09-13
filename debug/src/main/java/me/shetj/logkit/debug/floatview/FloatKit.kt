@@ -27,6 +27,7 @@ import android.annotation.SuppressLint
 import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Binder
@@ -67,6 +68,7 @@ object FloatKit {
             if (!Settings.canDrawOverlays(this)) {
                 if (needGet) {
                     val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
+                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
                     if (this is FragmentActivity) {
                         startActivityForResult(intent, 5004)
                     } else {

@@ -24,7 +24,7 @@ class LogView @JvmOverloads constructor(
 
     override fun initView(context: Context) {
         LayoutInflater.from(context).inflate(R.layout.layout_log_current,this,true).apply {
-            logCurrentView =   this.findViewById<TextView>(R.id.current_log)
+            logCurrentView =   this.findViewById(R.id.current_log)
             scroll = this.findViewById(R.id.NestedScrollView)
             this.findViewById<View>(R.id.close).setOnClickListener {
                 removeForWindowManager()
@@ -32,11 +32,14 @@ class LogView @JvmOverloads constructor(
             this.findViewById<View>(R.id.clean).setOnClickListener {
                 logCurrentView?.text = ""
             }
+            this.findViewById<View>(R.id.look).setOnClickListener {
+                DebugFunc.getInstance().startLogsActivity()
+            }
         }
     }
 
     override fun log(string: String?) {
-        logCurrentView?.append(string)
+        logCurrentView?.append("$string$lineString")
         scroll.apply {
             if (scroll?.canScrollVertically(1) == false) {
                 postDelayed({

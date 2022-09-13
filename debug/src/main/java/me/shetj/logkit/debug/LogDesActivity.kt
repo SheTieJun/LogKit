@@ -11,13 +11,13 @@ import java.io.File
 class LogDesActivity : AppCompatActivity() {
 
 
-    companion object{
-            fun start(context: Context,file:String){
-                val intent = Intent(context,LogDesActivity::class.java).apply {
-                    putExtra("file",file)
-                }
-                context.startActivity(intent)
+    companion object {
+        fun start(context: Context, file: String) {
+            val intent = Intent(context, LogDesActivity::class.java).apply {
+                putExtra("file", file)
             }
+            context.startActivity(intent)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,21 +26,22 @@ class LogDesActivity : AppCompatActivity() {
 
         val filePath = intent.getStringExtra("file")
 
-        if (filePath.isNullOrEmpty()){
+        if (filePath.isNullOrEmpty()) {
             finish()
+            return
         }
 
         val file = File(filePath)
 
-        if (!file.exists()){
-            Toast.makeText(this,"文件不存在",Toast.LENGTH_LONG).show()
+        if (!file.exists()) {
+            Toast.makeText(this, "文件不存在", Toast.LENGTH_LONG).show()
             finish()
         }
 
         val logDes = findViewById<TextView>(R.id.log_des)
 
         file.forEachLine {
-            logDes.append(it)
+            logDes.append(it + lineString)
         }
     }
 }
