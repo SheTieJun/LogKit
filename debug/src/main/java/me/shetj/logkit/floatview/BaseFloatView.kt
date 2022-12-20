@@ -32,6 +32,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
+import kotlin.math.abs
+import me.shetj.logkit.LogLogo
+import me.shetj.logkit.SPUtils
 import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
 import me.shetj.logkit.floatview.FloatKit.getWinManager
 
@@ -122,7 +125,7 @@ abstract class BaseFloatView : FrameLayout {
                     onTouchEvent(event)
                 }
                 MotionEvent.ACTION_UP -> {
-                    if (oldX == event.rawX && oldY == event.rawY) {
+                    if (abs(event.rawX - oldX) < 10f || abs(event.rawY - oldY) < 10f){
                         this.performClick()
                     }
                 }
@@ -149,10 +152,16 @@ abstract class BaseFloatView : FrameLayout {
                 mYInScreen = event.rawY - mStatusBarHeight
                 updateViewPosition()
             }
-            MotionEvent.ACTION_UP -> if (mXDownInScreen == mXInScreen &&
-                mYDownInScreen == mYInScreen
-            ) { // 手指没有滑动视为点击，回到窗口模式
-                performClick()
+            MotionEvent.ACTION_UP -> {
+                if (this is LogLogo){
+                    SPUtils.put(context,"slog_logo_x",(mXInScreen - mXInView).toInt())
+                    SPUtils.put(context,"slog_logo_y",(mYInScreen - mYInView).toInt())
+                }
+                if (mXDownInScreen == mXInScreen &&
+                    mYDownInScreen == mYInScreen
+                ) { // 手指没有滑动视为点击，回到窗口模式
+                    performClick()
+                }
             }
             else -> {
             }

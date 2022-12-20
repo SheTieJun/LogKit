@@ -9,7 +9,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
-        app:round="5dp">
+        app:round="4dp">
 
     </androidx.constraintlayout.utils.widget.ImageFilterView>
 </FrameLayout>

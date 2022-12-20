@@ -1,6 +1,6 @@
 package me.shetj.logkit.filter
 import me.shetj.logkit.LogModel
-import me.shetj.logkit.LogPriority
+import me.shetj.logkit.LogLevel
 
 /**
  * Priority filter
@@ -9,9 +9,9 @@ import me.shetj.logkit.LogPriority
  */
 internal class PriorityFilter : Criteria<LogModel> {
 
-     private var mPriority: LogPriority = LogPriority.VERBOSE
+     private var mPriority: LogLevel = LogLevel.VERBOSE
 
-    fun setPriority( constraint: LogPriority) {
+    fun setPriority( constraint: LogLevel) {
         mPriority = constraint
     }
 
@@ -19,7 +19,7 @@ internal class PriorityFilter : Criteria<LogModel> {
         val filteredList = ArrayList<LogModel>()
 
         for (item in input) {
-            if (item.logPriority >= mPriority) {
+            if (item.logLevel >= mPriority) {
                 filteredList.add(item)
             }
         }
@@ -28,6 +28,6 @@ internal class PriorityFilter : Criteria<LogModel> {
     }
 
     override fun reset() {
-        mPriority = LogPriority.VERBOSE
+        mPriority = LogLevel.VERBOSE
     }
 }

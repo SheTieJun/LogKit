@@ -1,21 +1,21 @@
 package me.shetj.logkit
 
-import me.shetj.logkit.LogPriority.DEBUG
-import me.shetj.logkit.LogPriority.ERROR
-import me.shetj.logkit.LogPriority.INFO
-import me.shetj.logkit.LogPriority.VERBOSE
-import me.shetj.logkit.LogPriority.WARN
+import me.shetj.logkit.LogLevel.DEBUG
+import me.shetj.logkit.LogLevel.ERROR
+import me.shetj.logkit.LogLevel.INFO
+import me.shetj.logkit.LogLevel.VERBOSE
+import me.shetj.logkit.LogLevel.WARN
 
 
-data class LogModel(val logPriority: LogPriority, val tag: String, val logMessage: String)
+data class LogModel(val logLevel: LogLevel, val tag: String, val logMessage: String)
 
 
-enum class LogPriority{
+enum class LogLevel {
     VERBOSE, DEBUG, INFO, WARN, ERROR
 }
 
-  fun getLogPriorityInitials(logPriority: LogPriority): String {
-    return when (logPriority) {
+fun getLogPriorityInitials(logLevel: LogLevel): String {
+    return when (logLevel) {
         DEBUG -> "D"
         ERROR -> "E"
         INFO -> "I"

@@ -25,12 +25,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
-import com.google.android.material.textfield.TextInputLayout
-import me.shetj.logkit.LogPriority.DEBUG
-import me.shetj.logkit.LogPriority.ERROR
-import me.shetj.logkit.LogPriority.INFO
-import me.shetj.logkit.LogPriority.VERBOSE
-import me.shetj.logkit.LogPriority.WARN
+import me.shetj.logkit.LogLevel.DEBUG
+import me.shetj.logkit.LogLevel.ERROR
+import me.shetj.logkit.LogLevel.INFO
+import me.shetj.logkit.LogLevel.VERBOSE
+import me.shetj.logkit.LogLevel.WARN
 import me.shetj.logkit.floatview.BaseFloatView
 import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
 import me.shetj.logkit.floatview.FloatKit.getWinManager
@@ -153,7 +152,7 @@ internal class LogChat @JvmOverloads constructor(
 
     private fun showPriorityOptions(context: Context, logPriorityTxtVw: TextView) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context, com.google.android.material.R.style.Theme_Material3_DayNight_Dialog)
-        builder.setTitle("Select Log priority")
+        builder.setTitle("Select Log Level")
         val priorityList: List<String> = resources.getStringArray(R.array.log_priority_names).toMutableList()
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
             context,
@@ -172,8 +171,8 @@ internal class LogChat @JvmOverloads constructor(
         dialog.show()
     }
 
-    private fun getLogPriority(selectedIndex: Int): LogPriority {
-        var priority: LogPriority = VERBOSE
+    private fun getLogPriority(selectedIndex: Int): LogLevel {
+        var priority: LogLevel = VERBOSE
 
         when (selectedIndex) {
             0 -> priority = VERBOSE

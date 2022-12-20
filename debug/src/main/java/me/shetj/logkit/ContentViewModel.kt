@@ -36,7 +36,7 @@ internal class ContentViewModel(private val mVlogRepository: LogRepository) : Vi
      *
      * @param priority
      */
-    fun onPrioritySet( priority: LogPriority) {
+    fun onPrioritySet( priority: LogLevel) {
         mVlogRepository.configureLogPriority(priority)
     }
 

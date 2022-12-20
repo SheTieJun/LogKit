@@ -33,11 +33,11 @@ import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-import me.shetj.logkit.LogPriority.DEBUG
-import me.shetj.logkit.LogPriority.ERROR
-import me.shetj.logkit.LogPriority.INFO
-import me.shetj.logkit.LogPriority.VERBOSE
-import me.shetj.logkit.LogPriority.WARN
+import me.shetj.logkit.LogLevel.DEBUG
+import me.shetj.logkit.LogLevel.ERROR
+import me.shetj.logkit.LogLevel.INFO
+import me.shetj.logkit.LogLevel.VERBOSE
+import me.shetj.logkit.LogLevel.WARN
 import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
 
 
@@ -53,7 +53,7 @@ class SLog private constructor() {
     private var mContext: WeakReference<Context>? = null
     private var logView: LogLogo? = null
     private var logChat: LogChat? = null
-    private var mTag = "Debug"
+    private var mTag = "SLog"
     private val isEnabled = AtomicBoolean(false)
     private var isShowChat = false
     private val mVlogRepository = LogRepository()
@@ -101,7 +101,6 @@ class SLog private constructor() {
         }
 
 
-
         fun v(tag: String, msg: String) {
             getInstance().v(tag, msg)
         }
@@ -132,6 +131,14 @@ class SLog private constructor() {
     fun start() {
         val isEnable = showLogLogo()
         isEnabled.set(isEnable)
+    }
+
+    /**
+     * 是否是开启的状态
+     * @return
+     */
+    fun isEnable(): Boolean {
+        return isEnabled.get()
     }
 
     fun stop() {
@@ -201,14 +208,19 @@ class SLog private constructor() {
 
 
     /**
-     * Log and to file
      * 记录并归档
      * @param log 日志信息
      * @param isSave 是否归档
      * @param isCall 是否在view中显示
      */
-    fun logIAndToFile(log: String, isSave: Boolean = true, isCall: Boolean = true) {
-        val logModel = LogModel(INFO, mTag, log)
+    fun logAndPushFile(
+        logLevel: LogLevel = INFO,
+        tag: String = mTag,
+        log: String,
+        isSave: Boolean = true,
+        isCall: Boolean = true
+    ) {
+        val logModel = LogModel(logLevel, tag, log)
         if (isCall) {
             feed(logModel)
         }
@@ -226,7 +238,7 @@ class SLog private constructor() {
         outputToFile(log, getTodayLogFile())
     }
 
-    internal fun showLogLogo(): Boolean {
+    private fun showLogLogo(): Boolean {
         if (mContext?.get()?.checkFloatPermission(true) == true) {
             mContext?.get()?.let {
                 if (logView == null) {
@@ -234,9 +246,11 @@ class SLog private constructor() {
                         setViewModel(mViewModel)
                     }
                 }
+                val slogLogoX = SPUtils.get(it, "slog_logo_x", 100) as Int
+                val slogLogoY = SPUtils.get(it, "slog_logo_y", 100) as Int
                 logView?.addToWindowManager {
-                    x = 100
-                    y = 100
+                    x = slogLogoX
+                    y = slogLogoY
                     width = -2
                     height = -2
                 }
@@ -246,7 +260,7 @@ class SLog private constructor() {
         return false
     }
 
-    internal fun hideLogLogo() {
+    private fun hideLogLogo() {
         logView?.removeForWindowManager()
     }
 
@@ -289,11 +303,11 @@ class SLog private constructor() {
     //endregion logSetting
 
     @SuppressLint("RestrictedApi")
-    internal  fun outputToFile(log: LogModel, path: String? = getTodayLogFile()) {
+    internal fun outputToFile(log: LogModel, path: String? = getTodayLogFile()) {
         ArchTaskExecutor.getIOThreadExecutor().execute {
             if (path.isNullOrEmpty()) return@execute
             try {
-                File(path).appendText("${getLogPriorityInitials(log.logPriority)}:${log.tag}:${log.logMessage}$lineString")
+                File(path).appendText("${getLogPriorityInitials(log.logLevel)}:${log.tag}:${log.logMessage}$lineString")
             } catch (e: Exception) {
                 e.printStackTrace()
             }

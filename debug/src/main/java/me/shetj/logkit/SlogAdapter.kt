@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import me.shetj.logkit.LogPriority.DEBUG
-import me.shetj.logkit.LogPriority.ERROR
-import me.shetj.logkit.LogPriority.INFO
-import me.shetj.logkit.LogPriority.VERBOSE
-import me.shetj.logkit.LogPriority.WARN
+import me.shetj.logkit.LogLevel.DEBUG
+import me.shetj.logkit.LogLevel.ERROR
+import me.shetj.logkit.LogLevel.INFO
+import me.shetj.logkit.LogLevel.VERBOSE
+import me.shetj.logkit.LogLevel.WARN
 import me.shetj.logkit.SlogAdapter.LogViewHolder
 
 internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
@@ -37,7 +37,7 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
     override fun onBindViewHolder(holder: LogViewHolder, position: Int) {
 
         val model = mFilteredLogList!![position]
-        val priority = model.logPriority
+        val priority = model.logLevel
 
         when (priority) {
             ERROR -> {
@@ -61,16 +61,13 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
                 holder.logMessage.setTextColor(debugColor)
             }
         }
-        holder.logTag.text = getLogPriorityInitials(model.logPriority) + "/" + model.tag + ": "
+        holder.logTag.text = getLogPriorityInitials(model.logLevel) + "/" + model.tag + ": "
         val isExpanded = model == mExpandedModel
-        holder.logMessage.text =
+        holder.logMessage.text = model.logMessage
             if (isExpanded)
-                model.logMessage
-            else if (model.logMessage.length > 50)
-                model.logMessage.substring(0, 49) + "..."
+                holder.logMessage.maxLines = -1
             else
-                model.logMessage
-
+                holder.logMessage.maxLines = 1
         holder.expandCollapseArrow.setImageResource(if (isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down)
         holder.itemView.setOnClickListener {
             mExpandedModel = if (isExpanded) null else model
@@ -85,9 +82,7 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
     override fun onBindViewHolder(holder: LogViewHolder, position: Int, payloads: MutableList<Any>) {
         super.onBindViewHolder(holder, position, payloads)
         val model = mFilteredLogList!![position]
-        val priority = model.logPriority
-
-
+        val priority = model.logLevel
         when (priority) {
             ERROR -> {
                 holder.logTag.setTextColor(errorColor)
@@ -110,16 +105,13 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
                 holder.logMessage.setTextColor(debugColor)
             }
         }
-        holder.logTag.text = getLogPriorityInitials(model.logPriority) + "/" + model.tag + ": "
+        holder.logTag.text = getLogPriorityInitials(model.logLevel) + "/" + model.tag + ": "
         val isExpanded = model == mExpandedModel
-        holder.logMessage.text =
-            if (isExpanded)
-                model.logMessage
-            else if (model.logMessage.length > 50)
-                model.logMessage.substring(0, 49) + "..."
-            else
-                model.logMessage
-
+        holder.logMessage.text = model.logMessage
+        if (isExpanded)
+            holder.logMessage.maxLines = 30
+        else
+            holder.logMessage.maxLines = 1
         holder.expandCollapseArrow.setImageResource(if (isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down)
     }
 

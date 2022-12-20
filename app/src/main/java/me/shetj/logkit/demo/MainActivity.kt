@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
                     ("这是一条info;info日志：$it").logI()
                     ("这是一条错误错误日志：$it").logE()
                     SLog.w("这是一条警告日志$it")
-                    SLog.d("这是一条Debug日志$it")
+                    SLog.d("这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志$it")
                     delay(500)
                 }
             }

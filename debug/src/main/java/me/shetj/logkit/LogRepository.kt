@@ -60,7 +60,7 @@ internal class LogRepository(private val mFilterDelay: Long = 100) : Filter() {
      *
      * @param priority
      */
-    fun configureLogPriority(priority: LogPriority) {
+    fun configureLogPriority(priority: LogLevel) {
         mPriorityFilter.setPriority(priority)
         initiateFilter()
     }

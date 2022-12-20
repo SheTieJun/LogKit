@@ -35,9 +35,7 @@ class SLog private constructor() {
 
         @JvmStatic
         fun init(context: Context): SLog {
-            return getInstance().also {
-                it.initContext(context)
-            }
+            return getInstance()
         }
 
         @JvmStatic
@@ -50,43 +48,33 @@ class SLog private constructor() {
         }
 
         fun v(msg: String) {
-            getInstance().v(msg)
         }
 
         fun d(msg: String) {
-            getInstance().d(msg)
         }
 
         fun i(msg: String) {
-            getInstance().i(msg)
         }
 
         fun w(msg: String) {
-            getInstance().w(msg)
         }
 
         fun e(msg: String) {
-            getInstance().e(msg)
         }
 
         fun v(tag: String, msg: String) {
-            getInstance().v(tag, msg)
         }
 
         fun d(tag: String, msg: String) {
-            getInstance().d(tag, msg)
         }
 
         fun i(tag: String, msg: String) {
-            getInstance().i(tag, msg)
         }
 
         fun w(tag: String, msg: String) {
-            getInstance().w(tag, msg)
         }
 
         fun e(tag: String, msg: String) {
-            getInstance().e(tag, msg)
         }
     }
 
@@ -141,14 +129,6 @@ class SLog private constructor() {
     fun e(tag: String = mTag, msg: String) {
     }
 
-
-    /**
-     * Log and to file
-     * 记录并归档
-     * @param log 日志信息
-     * @param isSave 是否归档
-     * @param isCall 是否在view中显示
-     */
     fun logIAndToFile(log: String, isSave: Boolean = true, isCall: Boolean = true) {
     }
 

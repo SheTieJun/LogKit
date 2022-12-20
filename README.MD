@@ -28,7 +28,7 @@ SLog.v("这是一条日志日志日志")
 
 ### 方式二
 
-use Timer,
+use Timber,
 
 ```Kotlin
 class SLogTree : Timber.Tree() {
@@ -63,6 +63,8 @@ Timber.plant(SLogTree())
 
 ## 接入
 
+[![](https://jitpack.io/v/SheTieJun/LogKit.svg)](https://jitpack.io/#SheTieJun/LogKit)
+
 Step 1. Add it in your root build.gradle at the end of repositories:
 
 	allprojects {
@@ -77,3 +79,8 @@ Step 2. Add the dependency
 	    debugImplementation 'com.github.SheTieJun.LogKit:logkit-debug:tag'
         releaseImplementation 'com.github.SheTieJun.LogKit:logkit-release:tag'
 	}
+
+
+## ToDo
+- [X] 小悬浮记录上一次的位置
+- [ ] 增加全局关闭的功能
