@@ -33,19 +33,19 @@ use Timber,
 ```Kotlin
 class SLogTree : Timber.Tree() {
 
-    private val vlog: SLog = SLog.getInstance()
-    private val defaultTag = ""
+    private val slog: SLog = SLog.getInstance()
+    private val defaultTag = "log"
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         val tag = tag ?: defaultTag
 
         when (priority) {
-            Log.VERBOSE -> vlog.v(tag, message)
-            Log.INFO -> vlog.i(tag, message)
-            Log.DEBUG -> vlog.d(tag, message)
-            Log.WARN -> vlog.w(tag, message)
-            Log.ERROR -> vlog.e(tag, message)
-            else -> vlog.v(tag, message)
+            Log.VERBOSE -> slog.v(tag, message)
+            Log.INFO -> slog.i(tag, message)
+            Log.DEBUG -> slog.d(tag, message)
+            Log.WARN -> slog.w(tag, message)
+            Log.ERROR -> slog.e(tag, message)
+            else -> slog.v(tag, message)
         }
     }
 }
@@ -81,6 +81,14 @@ Step 2. Add the dependency
 	}
 
 
+
+## 夸应用输出日志 
+- 需要解决在Android 11上 bindService 失败
+
+- 详细使用方式见demo,和[文档](messenger)
+
+
 ## ToDo
 - [X] 小悬浮记录上一次的位置
-- [ ] 增加全局关闭的功能
+- [ ] 增加通过悬浮球关闭整个日志功能
+- [X] 增加服务，进行跨进程输出日志

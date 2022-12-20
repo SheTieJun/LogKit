@@ -18,3 +18,4 @@ rootProject.name = "LogKit"
 include ':app'
 include ':debug'
 include ':release'
+include ':messenger'

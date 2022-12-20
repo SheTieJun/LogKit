@@ -14,6 +14,11 @@
             android:name="me.shetj.logkit.LogFilesActivity"
             android:exported="false"
             android:launchMode="singleTask"/>
+
+        <service android:name="me.shetj.logkit.service.SLogServerService"
+            android:exported="true"
+            android:enabled="true">
+        </service>
     </application>
 
 </manifest>

@@ -64,10 +64,10 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
         holder.logTag.text = getLogPriorityInitials(model.logLevel) + "/" + model.tag + ": "
         val isExpanded = model == mExpandedModel
         holder.logMessage.text = model.logMessage
-            if (isExpanded)
-                holder.logMessage.maxLines = -1
-            else
-                holder.logMessage.maxLines = 1
+        if (isExpanded)
+            holder.logMessage.maxLines = -1
+        else
+            holder.logMessage.maxLines = 1
         holder.expandCollapseArrow.setImageResource(if (isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down)
         holder.itemView.setOnClickListener {
             mExpandedModel = if (isExpanded) null else model
@@ -77,6 +77,7 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
             lastPosition = position
             notifyItemChanged(position, 1)
         }
+        holder.logTime.text = model.time
     }
 
     override fun onBindViewHolder(holder: LogViewHolder, position: Int, payloads: MutableList<Any>) {
@@ -112,6 +113,7 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
             holder.logMessage.maxLines = 30
         else
             holder.logMessage.maxLines = 1
+        holder.logTime.text = model.time
         holder.expandCollapseArrow.setImageResource(if (isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down)
     }
 
@@ -122,12 +124,14 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
 
     inner class LogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var logTag: TextView
+        var logTime: TextView
         var logMessage: TextView
         var expandCollapseArrow: ImageView
 
         init {
             logTag = itemView.findViewById(R.id.log_tag)
             logMessage = itemView.findViewById(R.id.log_message)
+            logTime = itemView.findViewById(R.id.log_time)
             expandCollapseArrow = itemView.findViewById(R.id.arrow_img)
         }
     }

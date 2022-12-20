@@ -131,13 +131,11 @@ internal class LogChat @JvmOverloads constructor(
         }
         winManager?.addView(this, windowParams)
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-        this.animation = AnimationUtils.loadAnimation(context,  androidx.appcompat.R.anim.abc_slide_in_bottom)
     }
 
 
     override fun removeForWindowManager() {
         super.removeForWindowManager()
-        this.animation = AnimationUtils.loadAnimation(context,  androidx.appcompat.R.anim.abc_slide_out_bottom)
     }
 
     fun setViewModel(model: ContentViewModel) {
@@ -151,7 +149,7 @@ internal class LogChat @JvmOverloads constructor(
 
 
     private fun showPriorityOptions(context: Context, logPriorityTxtVw: TextView) {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context, com.google.android.material.R.style.Theme_Material3_DayNight_Dialog)
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
         builder.setTitle("Select Log Level")
         val priorityList: List<String> = resources.getStringArray(R.array.log_priority_names).toMutableList()
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(

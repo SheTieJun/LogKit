@@ -34,7 +34,7 @@
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@id/addLog"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="add"
+        android:text="显示悬浮窗"
         />
     <com.google.android.material.button.MaterialButton
         android:id="@+id/removeFloat"
@@ -43,6 +43,6 @@
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@id/addFloat"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="remove"
+        android:text="关闭"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

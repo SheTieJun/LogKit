@@ -7,7 +7,7 @@ import me.shetj.logkit.LogLevel.VERBOSE
 import me.shetj.logkit.LogLevel.WARN
 
 
-data class LogModel(val logLevel: LogLevel, val tag: String, val logMessage: String)
+data class LogModel(val logLevel: LogLevel, val tag: String, val logMessage: String,val time:String)
 
 
 enum class LogLevel {

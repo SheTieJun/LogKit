@@ -182,27 +182,27 @@ class SLog private constructor() {
 
 
     fun v(tag: String = mTag, msg: String) {
-        val model = LogModel(VERBOSE, tag, msg)
+        val model = LogModel(VERBOSE, tag, msg,nowTs())
         feed(model)
     }
 
     fun d(tag: String = mTag, msg: String) {
-        val model = LogModel(DEBUG, tag, msg)
+        val model = LogModel(DEBUG, tag, msg,nowTs())
         feed(model)
     }
 
     fun i(tag: String = mTag, msg: String) {
-        val model = LogModel(INFO, tag, msg)
+        val model = LogModel(INFO, tag, msg,nowTs())
         feed(model)
     }
 
     fun w(tag: String = mTag, msg: String) {
-        val model = LogModel(WARN, tag, msg)
+        val model = LogModel(WARN, tag, msg,nowTs())
         feed(model)
     }
 
     fun e(tag: String = mTag, msg: String) {
-        val model = LogModel(ERROR, tag, msg)
+        val model = LogModel(ERROR, tag, msg,nowTs())
         feed(model)
     }
 
@@ -220,7 +220,7 @@ class SLog private constructor() {
         isSave: Boolean = true,
         isCall: Boolean = true
     ) {
-        val logModel = LogModel(logLevel, tag, log)
+        val logModel = LogModel(logLevel, tag, log,nowTs())
         if (isCall) {
             feed(logModel)
         }
@@ -335,6 +335,12 @@ class SLog private constructor() {
 
     private fun today(): String {
         return SimpleDateFormat("yyyy-MM-dd HH时mm分", Locale.getDefault()).format(Date()).toString()
+    }
+
+   private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
+    private fun nowTs(): String {
+        return format.format(Date()).toString()
     }
 
     internal fun isShowing(): Boolean {
