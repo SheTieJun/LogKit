@@ -1,45 +1,61 @@
-# LogKit
+# Slog
 
-### 初始化
+## 初始化
 
 ```kotlin
-DebugFunc.getInstance().initContext(this)  //初始化
-DebugFunc.getInstance().startLogsActivity() //查看已经输出的日志
+
+SLog.init(this)
+
 ```
 
-### 添加悬浮日志窗口
+## 开启和关闭
 
 ```kotlin
-DebugFunc.getInstance().addFlotLogView()
+     SLog.getInstance().start()
 ```
 
 ```kotlin
-lifecycle.addObserver(object : LifecycleEventObserver {
-    override fun onStateChanged(source: LifecycleOwner, event: Event) {
-        if (event == ON_RESUME) {
-            DebugFunc.getInstance().addFlotLogView()
+     SLog.getInstance().stop()
+```
+
+## 添加日志
+
+### 方式一
+
+```kotlin
+SLog.v("这是一条日志日志日志")
+```
+
+### 方式二
+
+use Timer,
+
+```Kotlin
+class SLogTree : Timber.Tree() {
+
+    private val vlog: SLog = SLog.getInstance()
+    private val defaultTag = ""
+
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+        val tag = tag ?: defaultTag
+
+        when (priority) {
+            Log.VERBOSE -> vlog.v(tag, message)
+            Log.INFO -> vlog.i(tag, message)
+            Log.DEBUG -> vlog.d(tag, message)
+            Log.WARN -> vlog.w(tag, message)
+            Log.ERROR -> vlog.e(tag, message)
+            else -> vlog.v(tag, message)
         }
-        if (event == ON_STOP) {
-            DebugFunc.getInstance().removeFlotLogView()
-        }
-    }
-})
-```
-
-### 添加日志
-
-```kotlin
-launch {
-    repeat(100) {
-        DebugFunc.getInstance().saveLogToFile("这是一条日志日志日志：$it")
-        delay(50)
     }
 }
+
+
+Timber.plant(SLogTree())
 ```
 
-```kotlin
-    fun logAndToFile(log: String,isSave:Boolean = true,isCall:Boolean = true) 
+## 效果图片
 
-    //保存到文件
-    fun saveLogToFile(log: String) 
-```
+| 效果图片                    |                     |                     |
+|-------------------------|---------------------|---------------------|
+| ![](img/def_pic_1.webp) | ![](img/pic_1.webp) | ![](img/pic_2.webp) |

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.shetj.logkit.debug">
+    package="me.shetj.logkit">
+
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <application>
         <activity
-            android:name=".LogDesActivity"
-            android:exported="false" />
+            android:name="me.shetj.logkit.LogDesActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            />
         <activity
-            android:name=".LogFilesActivity"
-            android:exported="false" />
+            android:name="me.shetj.logkit.LogFilesActivity"
+            android:exported="false"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>

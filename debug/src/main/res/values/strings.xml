@@ -1,1 +1,21 @@
-<resources></resources>
+<resources>
+    <string-array name="log_priority_names">
+        <item>Verbose</item>
+        <item>Debug</item>
+        <item>Info</item>
+        <item>Warn</item>
+        <item>Error</item>
+    </string-array>
+    <color name="background">#35383F</color>
+    <color name="editTextColor">#35383F</color>
+    <color name="editTextColorHint">#7735383F</color>
+    <string name="select_priority">All</string>
+
+
+<!--    <color name="log_errorColor">#E64A19</color>-->
+<!--    <color name="log_warnColor">#FFC107</color>-->
+<!--    <color name="log_infoColor">#4CAF50</color>-->
+<!--    <color name="log_defaultColor">#34363A</color>-->
+<!--    <color name="log_debugColor">#1976D2</color>-->
+
+</resources>

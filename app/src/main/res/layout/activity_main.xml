@@ -34,6 +34,15 @@
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@id/addLog"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="展示DebugView"
+        android:text="add"
+        />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/removeFloat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/addFloat"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="remove"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
