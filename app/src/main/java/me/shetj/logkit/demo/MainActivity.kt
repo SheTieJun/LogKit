@@ -1,4 +1,4 @@
-package me.shetj.logkit
+package me.shetj.logkit.demo
 
 import android.os.Bundle
 import android.view.View
@@ -7,6 +7,9 @@ import kotlinx.coroutines.delay
 import me.shetj.base.ktx.launch
 import me.shetj.base.ktx.logE
 import me.shetj.base.ktx.logI
+import me.shetj.logkit.SLog
+import me.shetj.logkit.SLogTree
+import me.shetj.logkit.demo.R.layout
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -14,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(layout.activity_main)
 
         SLog.init(this)
         Timber.plant(SLogTree())

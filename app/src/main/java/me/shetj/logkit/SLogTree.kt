@@ -6,7 +6,7 @@ import timber.log.Timber
 class SLogTree : Timber.Tree() {
 
     private val slog: SLog = SLog.getInstance()
-    private val defaultTag = ""
+    private val defaultTag = "SLog"
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         val tag = tag ?: defaultTag

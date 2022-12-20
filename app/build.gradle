@@ -7,7 +7,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "me.shetj.logkit"
+        applicationId "me.shetj.logkit.demo"
         minSdk 24
         targetSdk 32
         versionCode 1
