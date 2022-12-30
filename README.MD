@@ -86,7 +86,11 @@ Step 2. Add the dependency
 - 需要解决在Android 11上 bindService 失败
 
 - 详细使用方式见demo,和[文档](messenger)
-
+``` 
+	dependencies {
+	    implementation 'com.github.SheTieJun.LogKit:logkit-messenger:tag'
+	}
+```
 
 ## ToDo
 - [X] 小悬浮记录上一次的位置
