@@ -1,10 +1,8 @@
 package me.shetj.logkit.demo
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import me.shetj.logkit.service.SLogServerService
 import kotlinx.coroutines.delay
 import me.shetj.base.ktx.launch
 import me.shetj.base.ktx.logE
@@ -22,9 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(layout.activity_main)
 
         Timber.plant(SLogTree())
-
-        startService(Intent(this, SLogServerService::class.java))
-
+        SLog.init(this)
         findViewById<View>(R.id.start).setOnClickListener {
             SLog.getInstance().startLogsActivity()
         }

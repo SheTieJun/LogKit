@@ -11,11 +11,11 @@ SLog.init(this)
 ## 开启和关闭
 
 ```kotlin
-     SLog.getInstance().start()
+SLog.getInstance().start()
 ```
 
 ```kotlin
-     SLog.getInstance().stop()
+SLog.getInstance().stop()
 ```
 
 ## 添加日志
