@@ -17,11 +17,6 @@
 </queries>
 ```
 
-同时需要启动服务
-
-```kotlin
- startService(Intent(this, SLogServerService::class.java))
-```
 
 在你的项目中添加
 
@@ -32,8 +27,8 @@
     <package android:name="me.shetj.logkit.demo" />
 </queries>
 ```
-
-``` kotlin 
+3. 客户端连接服务器
+```kotlin 
 // 客户端APP需要bind你的服务器 
 //  me.shetj.logkit.demo需要替换成对应服务器包名 
  SLogMessenger.getInstance().bindService(this,"me.shetj.logkit.demo")
@@ -41,11 +36,11 @@
 
 4. 发送消息
 
-``` 
+```kotlin
   SLogMessenger.getInstance().sendMsg("这是消息消息")
 ```
 
-5. 客户端Timer使用
+5. 客户端Timber使用
 
 ```kotlin
 class SLogMessengerTree : Timber.Tree() {
