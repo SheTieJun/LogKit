@@ -85,14 +85,13 @@ Step 2. Add the dependency
 ## 夸应用输出日志 
 - 需要解决在Android 11上 bindService 失败
 
-- 详细使用方式见demo,和[文档](messenger)
+- 详细使用方式见 demo
 ``` 
 	dependencies {
 	    implementation 'com.github.SheTieJun.LogKit:logkit-messenger:tag'
 	}
 ```
+-[相关文档](messenger)
 
 ## ToDo
-- [X] 小悬浮记录上一次的位置
 - [ ] 增加通过悬浮球关闭整个日志功能
-- [X] 增加服务，进行跨进程输出日志

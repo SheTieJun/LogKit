@@ -7,9 +7,11 @@ import me.shetj.logkit.service.SLogServerService.Companion.KEY_MSG
 
 open class SLogMessenger {
 
+    private var msgTag = TAG
+
     companion object {
         const val TAG = "SLogMessenger"
-        const val SERVICE_NAME ="me.shetj.logkit.service.SLogServerService"
+        const val SERVICE_NAME = "me.shetj.logkit.service.SLogServerService"
 
         @Volatile
         private var mInstance: SLogMessenger? = null
@@ -22,6 +24,27 @@ open class SLogMessenger {
                 }
             }
         }
+
+        fun v(msg: String) {
+            getInstance().v(msg = msg)
+        }
+
+        fun d(msg: String) {
+            getInstance().d(msg = msg)
+        }
+
+        fun i(msg: String) {
+            getInstance().i(msg = msg)
+        }
+
+        fun w(msg: String) {
+            getInstance().w(msg = msg)
+        }
+
+        fun e(msg: String) {
+            getInstance().e(msg = msg)
+        }
+
     }
 
     private var mController: IController? = null
@@ -35,10 +58,39 @@ open class SLogMessenger {
         return mController!!.bindService(context, packageName)
     }
 
+    fun setTag(tag:String){
+        msgTag = tag
+    }
+
     fun sendMsg(msg: String) {
-        mController?.sendToServer(KEY_MSG, msg)
+        v(TAG, msg)
+    }
+
+    fun v(tag: String = msgTag, msg: String) {
+        mController?.sendToServer(0, tag, msg)
             ?: Log.i(TAG, "error : sendToServer: u should bindService first")
     }
+
+    fun d(tag: String = msgTag, msg: String) {
+        mController?.sendToServer(1, tag, msg)
+            ?: Log.i(TAG, "error : sendToServer: u should bindService first")
+    }
+
+    fun i(tag: String = msgTag, msg: String) {
+        mController?.sendToServer(2, tag, msg)
+            ?: Log.i(TAG, "error : sendToServer: u should bindService first")
+    }
+
+    fun w(tag: String = msgTag, msg: String) {
+        mController?.sendToServer(3, tag, msg)
+            ?: Log.i(TAG, "error : sendToServer: u should bindService first")
+    }
+
+    fun e(tag: String = msgTag, msg: String) {
+        mController?.sendToServer(4, tag, msg)
+            ?: Log.i(TAG, "error : sendToServer: u should bindService first")
+    }
+
 
     fun unBindService() {
         mController?.unBindService()

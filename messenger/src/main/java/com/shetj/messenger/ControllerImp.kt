@@ -26,7 +26,7 @@ internal class ControllerImp private constructor() : Controller {
     }
 
 
-    private fun initService(packageName: String ): Int {
+    private fun initService(packageName: String): Int {
         try {
             Log.d(TAG, " sdk  initService  :packageName = $packageName, service = $SLogMessenger.SERVICE_NAME")
             val intent = Intent(SLogMessenger.SERVICE_NAME)
@@ -57,20 +57,20 @@ internal class ControllerImp private constructor() : Controller {
         }
     }
 
-    override fun sendToServer(key: String, msg: String) {
+    override fun sendToServer( level: Int, tag: String, msg: String) {
         if (!isBind) {
             Log.d(TAG, " sdk u must should bindService ")
-            if (packageName != null  && mContext != null) {
+            if (packageName != null && mContext != null) {
                 bindService(mContext!!, packageName!!)
             }
             return
         }
         try {
-
-            Log.d(TAG, " key = $key ;msg = $msg ")
             Message.obtain(null, MESSAGE_FROM_CLIENT).apply {
+                what = level
                 data = Bundle().apply {
-                    putString(key, msg)
+                    putString("SLog", msg)
+                    putString("tag", tag)
                 }
                 replyTo = mClientMessenger
             }.also {

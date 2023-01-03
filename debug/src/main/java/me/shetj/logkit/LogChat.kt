@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND
 import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
-import android.view.animation.AnimationUtils
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
