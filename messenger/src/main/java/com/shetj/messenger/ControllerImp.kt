@@ -67,7 +67,7 @@ internal class ControllerImp private constructor() : Controller {
         }
         try {
             Message.obtain(null, MESSAGE_FROM_CLIENT).apply {
-                what = level
+                arg1 = level
                 data = Bundle().apply {
                     putString("SLog", msg)
                     putString("tag", tag)

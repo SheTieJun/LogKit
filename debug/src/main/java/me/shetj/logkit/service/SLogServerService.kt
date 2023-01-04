@@ -28,7 +28,7 @@ class SLogServerService : Service() {
                  MESSAGE_FROM_CLIENT -> {
                      val msg = message.data.getString(KEY_MSG)?:return
                      val tag = message.data.getString(KEY_TAG)?:return
-                     when(message.what){
+                     when(message.arg1){
                          0 ->{
                              SLog.getInstance().v(tag,msg)
                          }
@@ -47,7 +47,6 @@ class SLogServerService : Service() {
                          else->{
                              SLog.getInstance().d(tag,msg)
                          }
-
                      }
                 }
                 else -> super.handleMessage(message)
