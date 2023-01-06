@@ -1,6 +1,7 @@
 package me.shetj.logkit
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -17,6 +18,7 @@ import android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 import android.widget.ImageView
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import com.google.android.material.badge.BadgeDrawable.*
+import me.shetj.logkit.R.string
 import me.shetj.logkit.Utils.drawableToBitmap
 import me.shetj.logkit.floatview.BaseFloatView
 import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
@@ -45,7 +47,7 @@ internal class LogLogo @JvmOverloads constructor(
             roundedBitmapDrawable.setAntiAlias(true)
             imageView = findViewById<ImageView>(R.id.image)
             imageView!!.setImageDrawable(roundedBitmapDrawable)
-            setViewClickInFloat {
+            setViewClickInFloat (onClickListener = {
                 if (SLog.getInstance().isShowing()) {
                     showChatAnim()
                     SLog.getInstance().hideLogChat()
@@ -53,11 +55,21 @@ internal class LogLogo @JvmOverloads constructor(
                     hideChatAnim()
                     SLog.getInstance().showLogChat()
                 }
-            }
+            },onLongClickListener = {
+                AlertDialog.Builder(imageView!!.context)
+                    .setTitle(context.getString(string.close_tip))
+                    .setNegativeButton("确定") { dialog, postion ->
+                        SLog.getInstance().stop()
+                    }
+                    .setPositiveButton("取消") { dialog, postion ->
+                        dialog.cancel()
+                    }.create().apply {
+                        window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
+                    }
+                    .show()
+                return@setViewClickInFloat true
+            })
         }
-
-
-
     }
 
 

@@ -94,4 +94,4 @@ Step 2. Add the dependency
 -[相关文档](messenger)
 
 ## ToDo
-- [ ] 增加通过悬浮球关闭整个日志功能
+- [X] ~~增加通过悬浮球关闭整个日志功能 : 长按弹窗关闭~~

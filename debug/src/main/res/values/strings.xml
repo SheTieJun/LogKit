@@ -10,9 +10,10 @@
     <color name="editTextColor">#35383F</color>
     <color name="editTextColorHint">#7735383F</color>
     <string name="select_priority">All</string>
+    <string name="close_tip">Close Log</string>
 
 
-<!--    <color name="log_errorColor">#E64A19</color>-->
+    <!--    <color name="log_errorColor">#E64A19</color>-->
 <!--    <color name="log_warnColor">#FFC107</color>-->
 <!--    <color name="log_infoColor">#4CAF50</color>-->
 <!--    <color name="log_defaultColor">#34363A</color>-->

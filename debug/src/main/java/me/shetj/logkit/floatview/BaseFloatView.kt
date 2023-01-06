@@ -27,11 +27,14 @@ import android.content.Context
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
+import android.widget.Toast
 import kotlin.math.abs
 import me.shetj.logkit.LogLogo
 import me.shetj.logkit.SPUtils
@@ -110,28 +113,24 @@ abstract class BaseFloatView : FrameLayout {
     /**
      * 给当前界面设置的view设置点击事件，不点击的时候，会滑动
      */
-    fun View.setViewClickInFloat(onClickListener: OnClickListener? = null) {
+    fun View.setViewClickInFloat(onClickListener: OnClickListener? = null,onLongClickListener: OnLongClickListener?=null) {
         setOnClickListener(onClickListener)
-        var oldX = 0f
-        var oldY = 0f
-        setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    oldX = event.rawX
-                    oldY = event.rawY
-                    onTouchEvent(event)
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    onTouchEvent(event)
-                }
-                MotionEvent.ACTION_UP -> {
-                    if (abs(event.rawX - oldX) < 10f || abs(event.rawY - oldY) < 10f){
-                        this.performClick()
-                    }
-                }
-                else -> {
-                }
+        setOnLongClickListener(onLongClickListener)
+        val mGestureListener = object : SimpleOnGestureListener() {
+            override fun onLongPress(e: MotionEvent?) {
+                super.onLongPress(e)
+                this@setViewClickInFloat.performLongClick()
             }
+
+            override fun onSingleTapUp(e: MotionEvent?): Boolean {
+                this@setViewClickInFloat.performClick()
+                return true
+            }
+        }
+        val mGestureDetector = GestureDetector(context, mGestureListener)
+        setOnTouchListener { _, event ->
+            mGestureDetector.onTouchEvent(event)
+            onTouchEvent(event)
             return@setOnTouchListener true
         }
     }

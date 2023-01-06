@@ -110,7 +110,7 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
         val isExpanded = model == mExpandedModel
         holder.logMessage.text = model.logMessage
         if (isExpanded)
-            holder.logMessage.maxLines = 30
+            holder.logMessage.maxLines = 50
         else
             holder.logMessage.maxLines = 1
         holder.logTime.text = model.time
