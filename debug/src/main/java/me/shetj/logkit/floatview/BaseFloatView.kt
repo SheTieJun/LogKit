@@ -58,6 +58,7 @@ abstract class BaseFloatView : FrameLayout {
     private var mYInScreen = 0f // 滑动事件距离屏幕上边界的距离
     private var mXInView = 0f // 滑动事件距离自身左边界的距离
     private var mYInView = 0f // 滑动事件距离自身上边界的距离
+    private var isAttach = false
 
     constructor(context: Context) : super(context) {
         initView(context)
@@ -103,11 +104,15 @@ abstract class BaseFloatView : FrameLayout {
                 }
             }
         }
+        isAttach = true
         winManager?.addView(this, windowParams)
     }
 
     open fun removeForWindowManager() {
-        winManager?.removeView(this)
+        if (isAttach){
+            winManager?.removeView(this)
+            isAttach = false
+        }
     }
 
     /**

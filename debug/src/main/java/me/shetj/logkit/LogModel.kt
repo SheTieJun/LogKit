@@ -21,6 +21,5 @@ fun getLogPriorityInitials(logLevel: LogLevel): String {
         INFO -> "I"
         VERBOSE -> "V"
         WARN -> "W"
-        else -> ""
     }
 }
