@@ -1,5 +1,6 @@
 package me.shetj.logkit
 
+import android.R.layout
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
@@ -15,6 +16,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.WindowManager.LayoutParams
 import android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import com.google.android.material.badge.BadgeDrawable.*
@@ -56,17 +58,30 @@ internal class LogLogo @JvmOverloads constructor(
                     SLog.getInstance().showLogChat()
                 }
             },onLongClickListener = {
-                AlertDialog.Builder(imageView!!.context)
-                    .setTitle(context.getString(string.close_tip))
-                    .setNegativeButton("确定") { dialog, postion ->
-                        SLog.getInstance().stop()
-                    }
-                    .setPositiveButton("取消") { dialog, postion ->
-                        dialog.cancel()
-                    }.create().apply {
-                        window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
-                    }
-                    .show()
+                val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+                val priorityList: List<String> = resources.getStringArray(R.array.log_fun).toMutableList()
+                val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+                    context,
+                    layout.simple_list_item_1,
+                    priorityList
+                )
+                builder.setAdapter(arrayAdapter) { _, selectedIndex ->
+                     when(priorityList[selectedIndex]){
+                         "Exit SLog" ->{
+                             SLog.getInstance().stop()
+                         }
+                         "Open Log Files" ->{
+                             SLog.getInstance().startLogsActivity()
+                         }
+                         "Clear Log Files"->{
+                             SLog.getInstance().clear()
+                         }
+                         else ->{}
+                     }
+                }
+                val dialog: AlertDialog = builder.create()
+                dialog.window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
+                dialog.show()
                 return@setViewClickInFloat true
             })
         }
@@ -81,6 +96,7 @@ internal class LogLogo @JvmOverloads constructor(
     }
 
 
+    @Suppress("DEPRECATION")
     override fun addToWindowManager(layout: ViewRect.() -> Unit) {
         if (context.checkFloatPermission()) {
             if (winManager == null) {
@@ -112,6 +128,7 @@ internal class LogLogo @JvmOverloads constructor(
                 }
             }
         }
+        isAttach = true
         winManager?.addView(this, windowParams)
     }
 

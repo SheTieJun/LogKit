@@ -97,7 +97,7 @@ internal abstract class BaseAdapter<T> @JvmOverloads constructor(
                     if (!it.isClickable) {
                         it.isClickable = true
                     }
-                    it.setOnClickListener { v ->
+                    it.setOnClickListener {
                         val position: Int = viewHolder.adapterPosition
                         if (position == RecyclerView.NO_POSITION) {
                             return@setOnClickListener
@@ -114,7 +114,7 @@ internal abstract class BaseAdapter<T> @JvmOverloads constructor(
                     if (!it.isLongClickable) {
                         it.isLongClickable = true
                     }
-                    it.setOnLongClickListener { v ->
+                    it.setOnLongClickListener {
                         val position: Int = viewHolder.adapterPosition
                         if (position == RecyclerView.NO_POSITION) {
                             return@setOnLongClickListener false

@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.*
 import android.util.Log
 import com.shetj.messenger.SLogMessenger.Companion.TAG
-import me.shetj.logkit.service.SLogServerService.Companion.MESSAGE_FROM_CLIENT
 
 internal class ControllerImp private constructor() : Controller {
 
@@ -25,10 +24,9 @@ internal class ControllerImp private constructor() : Controller {
         }
     }
 
-
     private fun initService(packageName: String): Int {
         try {
-            Log.d(TAG, " sdk  initService  :packageName = $packageName, service = $SLogMessenger.SERVICE_NAME")
+            Log.d(TAG, " sdk  initService  :packageName = $packageName, service = ${SLogMessenger.SERVICE_NAME}")
             val intent = Intent(SLogMessenger.SERVICE_NAME)
             intent.setPackage(packageName)
             intent.setClassName(packageName, SLogMessenger.SERVICE_NAME)
@@ -57,7 +55,7 @@ internal class ControllerImp private constructor() : Controller {
         }
     }
 
-    override fun sendToServer( level: Int, tag: String, msg: String) {
+    override fun sendToServer(level: Int, tag: String, msg: String, pushFile: Boolean) {
         if (!isBind) {
             Log.d(TAG, " sdk u must should bindService ")
             if (packageName != null && mContext != null) {
@@ -66,9 +64,10 @@ internal class ControllerImp private constructor() : Controller {
             return
         }
         try {
-            Message.obtain(null, MESSAGE_FROM_CLIENT).apply {
+            Message.obtain(null, 6001).apply {
                 arg1 = level
                 data = Bundle().apply {
+                    putBoolean("pushFile",pushFile)
                     putString("SLog", msg)
                     putString("tag", tag)
                 }

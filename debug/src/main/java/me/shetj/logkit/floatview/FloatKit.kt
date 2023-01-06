@@ -46,6 +46,7 @@ object FloatKit {
         return applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     }
 
+    @Suppress("DEPRECATION")
     fun getWindowParams(): WindowManager.LayoutParams {
         val mWindowParams = WindowManager.LayoutParams()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -60,6 +61,7 @@ object FloatKit {
         return mWindowParams
     }
 
+    @Suppress("DEPRECATION")
     fun Context.checkFloatPermission(needGet: Boolean = false): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // 6.0动态申请悬浮窗权限

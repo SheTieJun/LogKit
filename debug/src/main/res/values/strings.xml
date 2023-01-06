@@ -6,12 +6,20 @@
         <item>Warn</item>
         <item>Error</item>
     </string-array>
+
+
+
+    <string-array name="log_fun">
+        <item>Open Log Files</item>
+        <item>Clear Log Files</item>
+        <item>Exit SLog</item>
+    </string-array>
+
     <color name="background">#35383F</color>
     <color name="editTextColor">#35383F</color>
     <color name="editTextColorHint">#7735383F</color>
     <string name="select_priority">All</string>
     <string name="close_tip">Close Log</string>
-
 
     <!--    <color name="log_errorColor">#E64A19</color>-->
 <!--    <color name="log_warnColor">#FFC107</color>-->

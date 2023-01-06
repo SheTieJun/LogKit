@@ -41,6 +41,7 @@ internal object Utils {
         return (pxValue / getDensity() + 0.5f).toInt()
     }
 
+    @Suppress("DEPRECATION")
     @JvmStatic
     fun drawableToBitmap(drawable: Drawable?): Bitmap? {
         if (drawable == null) return null else if (drawable is BitmapDrawable) {
@@ -58,15 +59,6 @@ internal object Utils {
         } catch (e: OutOfMemoryError) {
             e.printStackTrace()
             null
-        }
-    }
-
-    @JvmStatic
-    fun getOverlayFlag(): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-        } else {
-            WindowManager.LayoutParams.TYPE_PHONE
         }
     }
 }

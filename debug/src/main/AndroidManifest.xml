@@ -7,11 +7,13 @@
     <application>
         <activity
             android:name="me.shetj.logkit.LogDesActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:exported="false"
             android:launchMode="singleTask"
             />
         <activity
             android:name="me.shetj.logkit.LogFilesActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:exported="false"
             android:launchMode="singleTask"/>
 

@@ -4,8 +4,11 @@ import android.app.Service
 import android.content.Intent
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.Message
 import android.os.Messenger
+import androidx.arch.core.executor.ArchTaskExecutor
+import me.shetj.logkit.LogLevel
 import me.shetj.logkit.SLog
 
 class SLogServerService : Service() {
@@ -22,30 +25,56 @@ class SLogServerService : Service() {
         SLog.getInstance().start()
     }
 
-    private class MessengerHandler : Handler() {
+    private class MessengerHandler : Handler(Looper.getMainLooper()) {
         override fun handleMessage(message: Message) {
             when (message.what) {
                  MESSAGE_FROM_CLIENT -> {
                      val msg = message.data.getString(KEY_MSG)?:return
                      val tag = message.data.getString(KEY_TAG)?:return
-                     when(message.arg1){
-                         0 ->{
-                             SLog.getInstance().v(tag,msg)
+                     val pushFile = message.data.getBoolean("pushFile",false)
+
+                     if (pushFile){
+                         val level = when(message.arg1){
+                             0 ->{
+                                 LogLevel.VERBOSE
+                             }
+                             1 ->{
+                                 LogLevel.DEBUG
+                             }
+                             2 ->{
+                                 LogLevel.INFO
+                             }
+                             3 ->{
+                                 LogLevel.WARN
+                             }
+                             4 ->{
+                                 LogLevel.ERROR
+                             }
+                             else->{
+                                 LogLevel.DEBUG
+                             }
                          }
-                         1 ->{
-                             SLog.getInstance().d(tag,msg)
-                         }
-                         2 ->{
-                             SLog.getInstance().i(tag,msg)
-                         }
-                         3 ->{
-                             SLog.getInstance().w(tag,msg)
-                         }
-                         4 ->{
-                             SLog.getInstance().w(tag,msg)
-                         }
-                         else->{
-                             SLog.getInstance().d(tag,msg)
+                         SLog.getInstance().logWithFile(level,tag,msg,isCall = true)
+                     }else{
+                         when(message.arg1){
+                             0 ->{
+                                 SLog.getInstance().v(tag,msg)
+                             }
+                             1 ->{
+                                 SLog.getInstance().d(tag,msg)
+                             }
+                             2 ->{
+                                 SLog.getInstance().i(tag,msg)
+                             }
+                             3 ->{
+                                 SLog.getInstance().w(tag,msg)
+                             }
+                             4 ->{
+                                 SLog.getInstance().e(tag,msg)
+                             }
+                             else->{
+                                 SLog.getInstance().d(tag,msg)
+                             }
                          }
                      }
                 }

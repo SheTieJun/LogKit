@@ -27,11 +27,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.os.Build.VERSION_CODES.O
 import androidx.arch.core.executor.ArchTaskExecutor
+import androidx.arch.core.executor.TaskExecutor
 import java.io.File
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import me.shetj.logkit.LogLevel.DEBUG
 import me.shetj.logkit.LogLevel.ERROR
@@ -58,6 +61,8 @@ class SLog private constructor() {
     private var isShowChat = false
     private val mVlogRepository = LogRepository()
     private val mViewModel: ContentViewModel = ContentViewModel(mVlogRepository)
+    private val mSLogListeners: CopyOnWriteArrayList<SLogListener> by lazy { CopyOnWriteArrayList() }
+
 
     companion object {
 
@@ -81,23 +86,23 @@ class SLog private constructor() {
         }
 
         fun v(msg: String) {
-            getInstance().v(msg)
+            getInstance().v(msg = msg)
         }
 
         fun d(msg: String) {
-            getInstance().d(msg)
+            getInstance().d(msg = msg)
         }
 
         fun i(msg: String) {
-            getInstance().i(msg)
+            getInstance().i(msg = msg)
         }
 
         fun w(msg: String) {
-            getInstance().w(msg)
+            getInstance().w(msg = msg)
         }
 
         fun e(msg: String) {
-            getInstance().e(msg)
+            getInstance().e(msg = msg)
         }
 
 
@@ -125,12 +130,20 @@ class SLog private constructor() {
 
     //region 必须设置
     fun initContext(context: Context) {
-        mContext = WeakReference(context.applicationContext)
+        if (mContext?.get() == null) {
+            mContext = WeakReference(context.applicationContext)
+            autoClear()
+        }
     }
 
     fun start() {
-        val isEnable = showLogLogo()
-        isEnabled.set(isEnable)
+        if (!isEnable()) {
+            val isEnable = showLogLogo()
+            isEnabled.set(isEnable)
+            mSLogListeners.forEach {
+                it.onEnableChange(isEnable)
+            }
+        }
     }
 
     /**
@@ -142,10 +155,15 @@ class SLog private constructor() {
     }
 
     fun stop() {
-        isEnabled.set(false)
-        hideLogLogo()
-        hideLogChat()
-        mVlogRepository.reset()
+        if (isEnable()) {
+            isEnabled.set(false)
+            hideLogLogo()
+            hideLogChat()
+            mVlogRepository.reset()
+            mSLogListeners.forEach {
+                it.onEnableChange(false)
+            }
+        }
     }
 
     fun startLogsActivity() {
@@ -156,53 +174,47 @@ class SLog private constructor() {
         }
     }
 
+    fun addLogListener(listener: SLogListener) {
+        if (!mSLogListeners.contains(listener)) {
+            mSLogListeners.add(listener)
+        }
+    }
+
+    fun removeListener(listener: SLogListener) {
+        mSLogListeners.remove(listener)
+    }
+
     fun setTag(tag: String) {
         this.mTag = tag
     }
 
-    fun v(msg: String) {
-        v(mTag, msg)
-    }
-
-    fun d(msg: String) {
-        d(mTag, msg)
-    }
-
-    fun i(msg: String) {
-        i(mTag, msg)
-    }
-
-    fun w(msg: String) {
-        w(mTag, msg)
-    }
-
-    fun e(msg: String) {
-        e(mTag, msg)
-    }
-
-
+    @JvmOverloads
     fun v(tag: String = mTag, msg: String) {
-        val model = LogModel(VERBOSE, tag, msg,nowTs())
+        val model = LogModel(VERBOSE, tag, msg, nowTs())
         feed(model)
     }
 
+    @JvmOverloads
     fun d(tag: String = mTag, msg: String) {
-        val model = LogModel(DEBUG, tag, msg,nowTs())
+        val model = LogModel(DEBUG, tag, msg, nowTs())
         feed(model)
     }
 
+    @JvmOverloads
     fun i(tag: String = mTag, msg: String) {
-        val model = LogModel(INFO, tag, msg,nowTs())
+        val model = LogModel(INFO, tag, msg, nowTs())
         feed(model)
     }
 
+    @JvmOverloads
     fun w(tag: String = mTag, msg: String) {
-        val model = LogModel(WARN, tag, msg,nowTs())
+        val model = LogModel(WARN, tag, msg, nowTs())
         feed(model)
     }
 
+    @JvmOverloads
     fun e(tag: String = mTag, msg: String) {
-        val model = LogModel(ERROR, tag, msg,nowTs())
+        val model = LogModel(ERROR, tag, msg, nowTs())
         feed(model)
     }
 
@@ -210,23 +222,19 @@ class SLog private constructor() {
     /**
      * 记录并归档
      * @param log 日志信息
-     * @param isSave 是否归档
      * @param isCall 是否在view中显示
      */
-    fun logAndPushFile(
+    fun logWithFile(
         logLevel: LogLevel = INFO,
         tag: String = mTag,
         log: String,
-        isSave: Boolean = true,
         isCall: Boolean = true
     ) {
-        val logModel = LogModel(logLevel, tag, log,nowTs())
+        val logModel = LogModel(logLevel, tag, log, nowTs())
         if (isCall) {
             feed(logModel)
         }
-        if (isSave) {
-            saveLogToFile(logModel)
-        }
+        saveLogToFile(logModel)
     }
 
     /**
@@ -235,7 +243,7 @@ class SLog private constructor() {
      * @param log
      */
     internal fun saveLogToFile(log: LogModel) {
-        outputToFile(log, getTodayLogFile())
+        outputToFile(log, getTodayLogFile(log.tag))
     }
 
     private fun showLogLogo(): Boolean {
@@ -281,6 +289,9 @@ class SLog private constructor() {
             }
             logView?.showChatAnim()
             isShowChat = true
+            mSLogListeners.forEach {
+                it.onChatShowChange(isShowChat)
+            }
             return true
         }
         return false
@@ -291,6 +302,9 @@ class SLog private constructor() {
             isShowChat = false
             logView?.hideChatAnim()
             logChat?.removeForWindowManager()
+            mSLogListeners.forEach {
+                it.onChatShowChange(isShowChat)
+            }
         }
     }
 
@@ -303,7 +317,7 @@ class SLog private constructor() {
     //endregion logSetting
 
     @SuppressLint("RestrictedApi")
-    internal fun outputToFile(log: LogModel, path: String? = getTodayLogFile()) {
+    internal fun outputToFile(log: LogModel, path: String? = getTodayLogFile(log.tag)) {
         ArchTaskExecutor.getIOThreadExecutor().execute {
             if (path.isNullOrEmpty()) return@execute
             try {
@@ -315,8 +329,8 @@ class SLog private constructor() {
     }
 
 
-    private fun getTodayLogFile(): String {
-        return getSavePath() + File.separator + today()
+    private fun getTodayLogFile(tag: String): String {
+        return getSavePath() + File.separator + "[$tag]" + today()
     }
 
     private fun getSavePath(): String {
@@ -328,16 +342,44 @@ class SLog private constructor() {
         return logPath
     }
 
-    internal fun getSaveLogs(): MutableList<String> {
-        return File(getSavePath()).listFiles()?.mapNotNull { it.absolutePath }?.toMutableList() ?: mutableListOf()
+    internal fun getSaveLogs(): MutableList<LogFileInfo> {
+        return File(getSavePath()).listFiles()
+            ?.mapNotNull {
+                LogFileInfo(
+                    it.absolutePath,
+                    it.name,
+                    format.format(Date(it.lastModified())).toString()
+                )
+            }
+            ?.toMutableList() ?: mutableListOf()
     }
 
+    @SuppressLint("RestrictedApi")
+    internal fun autoClear() {
+        ArchTaskExecutor.getIOThreadExecutor().execute {
+            File(getSavePath()).listFiles()
+                ?.filter { System.currentTimeMillis() - it.lastModified() > 604_800_000 }?.forEach {
+                    it.delete()
+                }
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    internal fun clear() {
+        ArchTaskExecutor.getIOThreadExecutor().execute {
+            File(getSavePath()).listFiles()
+                ?.forEach {
+                    it.delete()
+                }
+        }
+    }
 
     private fun today(): String {
-        return SimpleDateFormat("yyyy-MM-dd HH时mm分", Locale.getDefault()).format(Date()).toString()
+        return SimpleDateFormat("MM-dd HH时mm分", Locale.getDefault()).format(Date()).toString()
     }
 
-   private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+    private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
 
     private fun nowTs(): String {
         return format.format(Date()).toString()
@@ -345,6 +387,17 @@ class SLog private constructor() {
 
     internal fun isShowing(): Boolean {
         return isShowChat
+    }
+
+    interface SLogListener {
+
+        fun onEnableChange(enable: Boolean) {
+
+        }
+
+        fun onChatShowChange(isShow: Boolean) {
+
+        }
     }
 }
 

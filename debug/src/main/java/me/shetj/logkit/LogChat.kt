@@ -97,6 +97,7 @@ internal class LogChat @JvmOverloads constructor(
         return false
     }
 
+    @Suppress("DEPRECATION")
     override fun addToWindowManager(layout: ViewRect.() -> Unit) {
         if (context.checkFloatPermission()) {
             if (winManager == null) {
@@ -128,6 +129,7 @@ internal class LogChat @JvmOverloads constructor(
                 }
             }
         }
+        isAttach = true
         winManager?.addView(this, windowParams)
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
     }

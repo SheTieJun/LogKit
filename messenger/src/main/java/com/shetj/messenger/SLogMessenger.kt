@@ -2,7 +2,6 @@ package com.shetj.messenger
 
 import android.content.Context
 import android.util.Log
-import me.shetj.logkit.service.SLogServerService.Companion.KEY_MSG
 
 
 open class SLogMessenger {
@@ -58,7 +57,7 @@ open class SLogMessenger {
         return mController!!.bindService(context, packageName)
     }
 
-    fun setTag(tag:String){
+    fun setTag(tag: String) {
         msgTag = tag
     }
 
@@ -66,28 +65,33 @@ open class SLogMessenger {
         v(TAG, msg)
     }
 
-    fun v(tag: String = msgTag, msg: String) {
-        mController?.sendToServer(0, tag, msg)
+    @JvmOverloads
+    fun v(tag: String = msgTag, msg: String, pushFile: Boolean = false) {
+        mController?.sendToServer(0, tag, msg, pushFile)
             ?: Log.i(TAG, "error : sendToServer: u should bindService first")
     }
 
-    fun d(tag: String = msgTag, msg: String) {
-        mController?.sendToServer(1, tag, msg)
+    @JvmOverloads
+    fun d(tag: String = msgTag, msg: String, pushFile: Boolean = false) {
+        mController?.sendToServer(1, tag, msg, pushFile)
             ?: Log.i(TAG, "error : sendToServer: u should bindService first")
     }
 
-    fun i(tag: String = msgTag, msg: String) {
-        mController?.sendToServer(2, tag, msg)
+    @JvmOverloads
+    fun i(tag: String = msgTag, msg: String, pushFile: Boolean = false) {
+        mController?.sendToServer(2, tag, msg, pushFile)
             ?: Log.i(TAG, "error : sendToServer: u should bindService first")
     }
 
-    fun w(tag: String = msgTag, msg: String) {
-        mController?.sendToServer(3, tag, msg)
+    @JvmOverloads
+    fun w(tag: String = msgTag, msg: String, pushFile: Boolean = false) {
+        mController?.sendToServer(3, tag, msg, pushFile)
             ?: Log.i(TAG, "error : sendToServer: u should bindService first")
     }
 
-    fun e(tag: String = msgTag, msg: String) {
-        mController?.sendToServer(4, tag, msg)
+    @JvmOverloads
+    fun e(tag: String = msgTag, msg: String, pushFile: Boolean = false) {
+        mController?.sendToServer(4, tag, msg, pushFile)
             ?: Log.i(TAG, "error : sendToServer: u should bindService first")
     }
 

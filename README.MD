@@ -49,17 +49,30 @@ class SLogTree : Timber.Tree() {
         }
     }
 }
-
-
 Timber.plant(SLogTree())
 ```
 
+## 添加日志到文件
+
+```kotlin
+SLog.getInstance().logWithFile(VERBOSE, "logFile", "这是一条错误VERBOSE日志")
+SLog.getInstance().logWithFile(DEBUG, "logFile", "这是一条错误DEBUG日志")
+SLog.getInstance().logWithFile(INFO, "logFile", "这是一条错误INFO日志")
+SLog.getInstance().logWithFile(WARN, "logFile", "这是一条错误WARN日志")
+SLog.getInstance().logWithFile(ERROR, "logFile", "这是一条错误ERROR日志")
+```
+
+文件命名：`[TAG]MM-dd HH时mm分`
+
+> 按TAG和每分钟进行输出文件，方便查找
+> 
+> 所以需要合理使用TAG,进行日志文件输出
+
 ## 效果图片
 
-| 效果图片                    |                     |                     |
-|-------------------------|---------------------|---------------------|
-| ![](img/def_pic_1.webp) | ![](img/pic_1.webp) | ![](img/pic_2.webp) |
-
+| 效果图片                    |                     |                     |                    |                    |
+|-------------------------|---------------------|---------------------|--------------------|--------------------|
+| ![](img/def_pic_1.webp) | ![](img/pic_1.webp) | ![](img/pic_2.webp) | ![](img/日志管理.webp) | ![](img/长按菜单.webp) |
 
 ## 接入
 
@@ -73,6 +86,7 @@ Step 1. Add it in your root build.gradle at the end of repositories:
 			maven { url 'https://jitpack.io' }
 		}
 	}
+
 Step 2. Add the dependency
 
 	dependencies {
@@ -80,18 +94,10 @@ Step 2. Add the dependency
         releaseImplementation 'com.github.SheTieJun.LogKit:logkit-release:tag'
 	}
 
+## 夸应用输出日志 -[相关文档](messenger)
 
-
-## 夸应用输出日志 
-- 需要解决在Android 11上 bindService 失败
-
-- 详细使用方式见 demo
-``` 
-	dependencies {
-	    implementation 'com.github.SheTieJun.LogKit:logkit-messenger:tag'
-	}
-```
--[相关文档](messenger)
+- 需要解决在Android >11上 bindService 失败的问题：应用可见性
 
 ## ToDo
+
 - [X] ~~增加通过悬浮球关闭整个日志功能 : 长按弹窗关闭~~
