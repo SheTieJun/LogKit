@@ -38,7 +38,7 @@ import android.view.Gravity
 import android.view.WindowManager
 import androidx.fragment.app.FragmentActivity
 
-object FloatKit {
+internal object FloatKit {
 
     private const val OP_SYSTEM_ALERT_WINDOW = 24 // 支持TYPE_TOAST悬浮窗
 

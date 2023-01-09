@@ -87,12 +87,6 @@ class SLogServerService : Service() {
 
 
     override fun onBind(intent: Intent): IBinder? {
-        SLog.getInstance().start()
         return mMessenger.binder
-    }
-
-    override fun onUnbind(intent: Intent?): Boolean {
-        SLog.getInstance().stop()
-        return super.onUnbind(intent)
     }
 }

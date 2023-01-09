@@ -4,7 +4,7 @@ import me.shetj.logkit.LogModel
 
 internal class KeywordFilter : Criteria<LogModel> {
 
-    var mKeyword: String = ""
+    private var mKeyword: String = ""
 
     fun setKeyword(keyword: String) {
         mKeyword = keyword

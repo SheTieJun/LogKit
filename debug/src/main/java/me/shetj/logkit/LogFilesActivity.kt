@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 
-class LogFilesActivity : AppCompatActivity() {
+internal class LogFilesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_files)
         supportActionBar?.title = "日志文件管理"
         supportActionBar?.subtitle = "大于7天的日志已自动删除"
+        SLog.getInstance().autoClear()
         findViewById<RecyclerView>(R.id.recycleView).apply {
             layoutManager = LinearLayoutManager(this@LogFilesActivity)
             adapter = object : BaseAdapter<LogFileInfo>(R.layout.item_logfile, SLog.getInstance().getSaveLogs()) {

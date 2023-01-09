@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class LogDesActivity : AppCompatActivity() {
+internal class LogDesActivity : AppCompatActivity() {
 
 
     private var logDes: TextView?=null

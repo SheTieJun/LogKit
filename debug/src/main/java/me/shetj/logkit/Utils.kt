@@ -11,16 +11,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.WindowManager
 
-/**
- *
- * <b>@author：</b> shetj<br>
- * <b>@createTime：</b> 2022/12/19<br>
- * <b>@email：</b> 375105540@qq.com<br>
- * <b>@describe</b>  <br>
- */
 internal object Utils {
-
-    internal const val FILTER_KEY_LIST = "filter_key_list"
 
     private var density = -1f
 
@@ -62,3 +53,5 @@ internal object Utils {
         }
     }
 }
+
+internal val lineString: String? = System.getProperty("line.separator")

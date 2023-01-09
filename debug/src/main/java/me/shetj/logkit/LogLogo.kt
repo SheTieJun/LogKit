@@ -12,6 +12,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.WindowManager.LayoutParams
@@ -19,8 +20,8 @@ import android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.view.isVisible
 import com.google.android.material.badge.BadgeDrawable.*
-import me.shetj.logkit.R.string
 import me.shetj.logkit.Utils.drawableToBitmap
 import me.shetj.logkit.floatview.BaseFloatView
 import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
@@ -34,6 +35,7 @@ internal class LogLogo @JvmOverloads constructor(
 
 
     private var imageView: ImageView? = null
+    private var unRead: View?= null
 
     override fun initView(context: Context) {
 
@@ -47,6 +49,7 @@ internal class LogLogo @JvmOverloads constructor(
             }
             val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, imageBitmap)
             roundedBitmapDrawable.setAntiAlias(true)
+            unRead = findViewById(R.id.unRead)
             imageView = findViewById<ImageView>(R.id.image)
             imageView!!.setImageDrawable(roundedBitmapDrawable)
             setViewClickInFloat (onClickListener = {
@@ -91,7 +94,7 @@ internal class LogLogo @JvmOverloads constructor(
     @SuppressLint("UnsafeOptInUsageError")
     fun setViewModel(model: ContentViewModel) {
         model.unReadCount.observeForever {
-
+            unRead?.isVisible = it >0
         }
     }
 

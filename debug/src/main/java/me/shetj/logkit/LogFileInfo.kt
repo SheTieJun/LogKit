@@ -1,4 +1,4 @@
 package me.shetj.logkit
 
 
-data class LogFileInfo(val file: String, val name: String,val time:String)
+internal data class LogFileInfo(val file: String, val name: String,val time:String)

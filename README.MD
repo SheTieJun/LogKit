@@ -26,9 +26,9 @@ SLog.getInstance().stop()
 SLog.v("这是一条日志日志日志")
 ```
 
-### 方式二
+### 方式二（推荐）
 
-use Timber,
+SLog + Timber,使用下面的方式就可以自动在输入日志的是同步到SLog
 
 ```Kotlin
 class SLogTree : Timber.Tree() {
@@ -94,7 +94,7 @@ Step 2. Add the dependency
         releaseImplementation 'com.github.SheTieJun.LogKit:logkit-release:tag'
 	}
 
-## 夸应用输出日志 -[相关文档](messenger)
+## 跨应用输出日志 -[相关文档](messenger)
 
 - 需要解决在Android >11上 bindService 失败的问题：应用可见性
 

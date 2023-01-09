@@ -1,4 +1,4 @@
-## 夸应用调试
+## 跨应用调试,基于Messenger
 
 1. 在项目添加
 
@@ -14,21 +14,12 @@ implementation 'com.github.SheTieJun.LogKit:logkit-messenger:tag'
 implementation project('com.github.SheTieJun.LogKit:logkit-debug:tag')
 ```
 
-同时添加下面代码保证可见性
+在客户端的项目中同时添加，保存应用可见性
 
 ```xml
 
 <queries>
-    <package android:name="你的项目包名" />
-</queries>
-```
-
-在你的项目中添加
-
-```xml
-
-<queries>
-    <!--   me.shetj.logkit.demo需要替换成对应服务器包名-->
+    <!--   me.shetj.logkit.demo需要替换成对应服务器包名，当前是app的应用-->
     <package android:name="me.shetj.logkit.demo" />
 </queries>
 ```

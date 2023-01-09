@@ -44,7 +44,7 @@ import me.shetj.logkit.floatview.FloatKit.getWinManager
 /**
  * 悬浮view的基类，只保留基础操作，可以继承实现更多
  */
-abstract class BaseFloatView : FrameLayout {
+internal abstract class BaseFloatView : FrameLayout {
     protected var windowParams: WindowManager.LayoutParams? = null
     protected var winManager: WindowManager? = null
 

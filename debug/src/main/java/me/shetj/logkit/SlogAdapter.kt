@@ -35,11 +35,8 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: LogViewHolder, position: Int) {
-
         val model = mFilteredLogList!![position]
-        val priority = model.logLevel
-
-        when (priority) {
+        when (model.logLevel) {
             ERROR -> {
                 holder.logTag.setTextColor(errorColor)
                 holder.logMessage.setTextColor(errorColor)
@@ -110,7 +107,7 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
         val isExpanded = model == mExpandedModel
         holder.logMessage.text = model.logMessage
         if (isExpanded)
-            holder.logMessage.maxLines = 50
+            holder.logMessage.maxLines = -1
         else
             holder.logMessage.maxLines = 1
         holder.logTime.text = model.time

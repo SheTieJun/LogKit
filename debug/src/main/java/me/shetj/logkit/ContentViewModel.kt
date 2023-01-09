@@ -9,11 +9,6 @@ internal class ContentViewModel(private val mVlogRepository: LogRepository) : Vi
     val resultObserver = MutableLiveData<List<LogModel>>()
     val unReadCount = MutableLiveData(0)
 
-
-
-
-
-
     init {
         mVlogRepository.setResultListener(this)
     }

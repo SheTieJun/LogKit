@@ -43,9 +43,6 @@ import me.shetj.logkit.LogLevel.VERBOSE
 import me.shetj.logkit.LogLevel.WARN
 import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
 
-
-val lineString: String? = System.getProperty("line.separator")
-
 /**
  * debug 功能扩展 必须开启debug的情况下
  * 1. 对一些日志进行特殊的保留
@@ -289,6 +286,7 @@ class SLog private constructor() {
             }
             logView?.showChatAnim()
             isShowChat = true
+            mViewModel.unReadCount.postValue(0)
             mSLogListeners.forEach {
                 it.onChatShowChange(isShowChat)
             }
@@ -311,6 +309,10 @@ class SLog private constructor() {
 
     private fun feed(model: LogModel) {
         if (!isEnabled.get()) return
+        if (!isShowing()){
+            val value = mViewModel.unReadCount.value?:0
+            mViewModel.unReadCount.postValue(value+1)
+        }
         mVlogRepository.feedLog(model)
     }
 
@@ -344,14 +346,14 @@ class SLog private constructor() {
 
     internal fun getSaveLogs(): MutableList<LogFileInfo> {
         return File(getSavePath()).listFiles()
+            ?.filter { System.currentTimeMillis() - it.lastModified() <= 604_800_000 }
             ?.mapNotNull {
                 LogFileInfo(
                     it.absolutePath,
                     it.name,
                     format.format(Date(it.lastModified())).toString()
                 )
-            }
-            ?.toMutableList() ?: mutableListOf()
+            }?.toMutableList() ?: mutableListOf()
     }
 
     @SuppressLint("RestrictedApi")
