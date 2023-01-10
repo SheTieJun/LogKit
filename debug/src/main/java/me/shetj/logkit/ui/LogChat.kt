@@ -1,4 +1,4 @@
-package me.shetj.logkit
+package me.shetj.logkit.ui
 
 import android.R.layout
 import android.app.AlertDialog
@@ -24,15 +24,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
+import me.shetj.logkit.LogLevel
 import me.shetj.logkit.LogLevel.DEBUG
 import me.shetj.logkit.LogLevel.ERROR
 import me.shetj.logkit.LogLevel.INFO
 import me.shetj.logkit.LogLevel.VERBOSE
 import me.shetj.logkit.LogLevel.WARN
+import me.shetj.logkit.R
+import me.shetj.logkit.R.array
+import me.shetj.logkit.SLog
+import me.shetj.logkit.adapter.SlogAdapter
 import me.shetj.logkit.floatview.BaseFloatView
 import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
 import me.shetj.logkit.floatview.FloatKit.getWinManager
-import me.shetj.logkit.floatview.ViewRect
 
 /**
  *
@@ -98,11 +102,10 @@ internal class LogChat @JvmOverloads constructor(
     }
 
     @Suppress("DEPRECATION")
-    override fun addToWindowManager(layout: ViewRect.() -> Unit) {
+    override fun addToWindowManager(layout: WindowManager.LayoutParams.() -> Unit) {
         if (context.checkFloatPermission()) {
             if (winManager == null) {
                 winManager = context.getWinManager()
-                val rect = ViewRect(0, 0, 0, 0).apply(layout)
                 val mWindowParams = WindowManager.LayoutParams()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     mWindowParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
@@ -114,12 +117,7 @@ internal class LogChat @JvmOverloads constructor(
                 mWindowParams.format = PixelFormat.TRANSLUCENT
                 mWindowParams.gravity = Gravity.START or Gravity.TOP
                 mWindowParams.dimAmount = 0.45f
-                windowParams = mWindowParams.apply {
-                    x = rect.x
-                    y = rect.y
-                    width = rect.width
-                    height = rect.height
-                }
+                windowParams = mWindowParams.apply(layout)
             }
         }
         if (this.parent != null) {
@@ -132,11 +130,6 @@ internal class LogChat @JvmOverloads constructor(
         isAttach = true
         winManager?.addView(this, windowParams)
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-    }
-
-
-    override fun removeForWindowManager() {
-        super.removeForWindowManager()
     }
 
     fun setViewModel(model: ContentViewModel) {
@@ -152,7 +145,7 @@ internal class LogChat @JvmOverloads constructor(
     private fun showPriorityOptions(context: Context, logPriorityTxtVw: TextView) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
         builder.setTitle("Select Log Level")
-        val priorityList: List<String> = resources.getStringArray(R.array.log_priority_names).toMutableList()
+        val priorityList: List<String> = resources.getStringArray(array.log_priority_names).toMutableList()
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
             context,
             layout.simple_list_item_1,

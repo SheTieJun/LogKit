@@ -1,4 +1,4 @@
-package me.shetj.logkit
+package me.shetj.logkit.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -12,7 +12,6 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.Menu
 import android.view.MenuItem
-import android.view.SurfaceControl.Transaction
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -30,15 +29,17 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.regex.Matcher
 import java.util.regex.Pattern
+import me.shetj.logkit.R
+import me.shetj.logkit.SLog
+import me.shetj.logkit.utils.lineString
 
-internal class LogDesActivity : AppCompatActivity() {
+internal class LogDesActivity : AppCompatActivity(), SLog.SLogListener {
 
 
-    private var logDes: TextView?=null
-    private var searchRoot: View?= null
-    private var sourceStr:String = ""
+    private var logDes: TextView? = null
+    private var searchRoot: View? = null
+    private var sourceStr: String = ""
     private var autoHideLiveData = MutableLiveData<Boolean>()
 
     companion object {
@@ -70,13 +71,13 @@ internal class LogDesActivity : AppCompatActivity() {
         searchRoot = findViewById(R.id.search_root)
         val editText = findViewById<EditText>(R.id.editText)
 
-        editText.asLiveData().throttleLast(200).observe(this){
+        editText.asTextLiveData().throttleLast(200).observe(this) {
             autoHideLiveData.postValue(false)
-            searchHighlight(logDes!!.text.toString(),editText.text.toString())
+            searchHighlight(logDes!!.text.toString(), editText.text.toString())
         }
 
-        autoHideLiveData.throttleLast(30000).observe(this){
-            if (it){
+        autoHideLiveData.throttleLast(30000).observe(this) {
+            if (it) {
                 searchRoot?.isVisible = false
                 windowInsetsController.hide(WindowInsetsCompat.Type.ime())
             }
@@ -90,7 +91,9 @@ internal class LogDesActivity : AppCompatActivity() {
             }
             sourceStr = logDes?.text.toString()
         }
+        SLog.getInstance().addLogListener(this)
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_search, menu)
         return super.onCreateOptionsMenu(menu)
@@ -100,9 +103,9 @@ internal class LogDesActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.menuSearch -> {
                 searchRoot?.isVisible = !searchRoot!!.isVisible
-                if (searchRoot!!.isVisible){
+                if (searchRoot!!.isVisible) {
                     autoHideLiveData.postValue(true)
-                }else{
+                } else {
                     autoHideLiveData.postValue(false)
                 }
             }
@@ -110,26 +113,37 @@ internal class LogDesActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun searchHighlight(sourceStr:String, searchString: String){
-        val  s = SpannableString(sourceStr);
+    private fun searchHighlight(sourceStr: String, searchString: String) {
+        val s = SpannableString(sourceStr);
         val p = Pattern.compile(searchString);//这里的abc为关键字
         val m = p.matcher(s)
         while (m.find()) {
             val start = m.start()
             val end = m.end()
-            s.setSpan( ForegroundColorSpan(Color.RED), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            s.setSpan(ForegroundColorSpan(Color.RED), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         logDes?.text = s
         autoHideLiveData.postValue(true)
     }
 
+    override fun onEnableChange(enable: Boolean) {
+        if (!enable) {
+            finish()
+        }
+    }
+
+    override fun onDestroy() {
+        SLog.getInstance().removeListener(this)
+        super.onDestroy()
+    }
+
 }
 
-val Activity.windowInsetsController: WindowInsetsControllerCompat
-    get() = WindowCompat.getInsetsController(window,findViewById(android.R.id.content))
+internal val Activity.windowInsetsController: WindowInsetsControllerCompat
+    get() = WindowCompat.getInsetsController(window, findViewById(android.R.id.content))
 
 
-fun EditText.asLiveData(): LiveData<String> {
+internal fun EditText.asTextLiveData(): LiveData<String> {
     return MutableLiveData<String>().apply {
         addTextChangedListener(
             beforeTextChanged =
@@ -143,7 +157,7 @@ fun EditText.asLiveData(): LiveData<String> {
     }
 }
 
-fun <T> LiveData<T>.throttleLast(duration: Long = 1000L) = MediatorLiveData<T>().also { mld ->
+internal fun <T> LiveData<T>.throttleLast(duration: Long = 1000L) = MediatorLiveData<T>().also { mld ->
     val source = this
     val handler = HandlerCompat.createAsync(Looper.getMainLooper())
     val isUpdate = AtomicBoolean(true) // 用来通知发送delay

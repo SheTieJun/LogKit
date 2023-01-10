@@ -1,35 +1,10 @@
-/*
- * MIT License
- *
- * Copyright (c) 2019 SheTieJun
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 package me.shetj.logkit
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.os.Build.VERSION_CODES.O
 import androidx.arch.core.executor.ArchTaskExecutor
-import androidx.arch.core.executor.TaskExecutor
 import java.io.File
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
@@ -42,6 +17,16 @@ import me.shetj.logkit.LogLevel.INFO
 import me.shetj.logkit.LogLevel.VERBOSE
 import me.shetj.logkit.LogLevel.WARN
 import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
+import me.shetj.logkit.model.LogFileInfo
+import me.shetj.logkit.model.LogModel
+import me.shetj.logkit.model.LogRepository
+import me.shetj.logkit.model.getLogPriorityInitials
+import me.shetj.logkit.ui.ContentViewModel
+import me.shetj.logkit.ui.LogChat
+import me.shetj.logkit.ui.LogFilesActivity
+import me.shetj.logkit.ui.LogLogo
+import me.shetj.logkit.utils.SPUtils
+import me.shetj.logkit.utils.lineString
 
 /**
  * debug 功能扩展 必须开启debug的情况下
@@ -59,7 +44,8 @@ class SLog private constructor() {
     private val mVlogRepository = LogRepository()
     private val mViewModel: ContentViewModel = ContentViewModel(mVlogRepository)
     private val mSLogListeners: CopyOnWriteArrayList<SLogListener> by lazy { CopyOnWriteArrayList() }
-
+    private val formatFileName = SimpleDateFormat("MM-dd HH时mm分", Locale.getDefault())
+    private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
     companion object {
 
@@ -129,7 +115,7 @@ class SLog private constructor() {
     fun initContext(context: Context) {
         if (mContext?.get() == null) {
             mContext = WeakReference(context.applicationContext)
-            autoClear()
+            autoClearLogFile()
         }
     }
 
@@ -163,7 +149,7 @@ class SLog private constructor() {
         }
     }
 
-    fun startLogsActivity() {
+    internal fun startLogsActivity() {
         mContext?.get()?.let {
             it.startActivity(Intent(it, LogFilesActivity::class.java).apply {
                 addFlags(FLAG_ACTIVITY_NEW_TASK)
@@ -174,6 +160,8 @@ class SLog private constructor() {
     fun addLogListener(listener: SLogListener) {
         if (!mSLogListeners.contains(listener)) {
             mSLogListeners.add(listener)
+            listener.onEnableChange(isEnable())
+            listener.onChatShowChange(isShowing())
         }
     }
 
@@ -309,9 +297,9 @@ class SLog private constructor() {
 
     private fun feed(model: LogModel) {
         if (!isEnabled.get()) return
-        if (!isShowing()){
-            val value = mViewModel.unReadCount.value?:0
-            mViewModel.unReadCount.postValue(value+1)
+        if (!isShowing()) {
+            val value = mViewModel.unReadCount.value ?: 0
+            mViewModel.unReadCount.postValue(value + 1)
         }
         mVlogRepository.feedLog(model)
     }
@@ -357,7 +345,7 @@ class SLog private constructor() {
     }
 
     @SuppressLint("RestrictedApi")
-    internal fun autoClear() {
+    internal fun autoClearLogFile() {
         ArchTaskExecutor.getIOThreadExecutor().execute {
             File(getSavePath()).listFiles()
                 ?.filter { System.currentTimeMillis() - it.lastModified() > 604_800_000 }?.forEach {
@@ -367,7 +355,7 @@ class SLog private constructor() {
     }
 
     @SuppressLint("RestrictedApi")
-    internal fun clear() {
+    internal fun clearLogFile() {
         ArchTaskExecutor.getIOThreadExecutor().execute {
             File(getSavePath()).listFiles()
                 ?.forEach {
@@ -377,11 +365,8 @@ class SLog private constructor() {
     }
 
     private fun today(): String {
-        return SimpleDateFormat("MM-dd HH时mm分", Locale.getDefault()).format(Date()).toString()
+        return formatFileName.format(Date()).toString()
     }
-
-    private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-
 
     private fun nowTs(): String {
         return format.format(Date()).toString()

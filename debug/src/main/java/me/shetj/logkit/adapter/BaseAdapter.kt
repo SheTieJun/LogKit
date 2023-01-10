@@ -1,4 +1,4 @@
-package me.shetj.logkit
+package me.shetj.logkit.adapter
 
 import android.view.LayoutInflater
 import android.view.View

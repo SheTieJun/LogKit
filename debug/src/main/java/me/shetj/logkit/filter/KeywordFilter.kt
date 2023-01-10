@@ -1,6 +1,6 @@
 package me.shetj.logkit.filter
 
-import me.shetj.logkit.LogModel
+import me.shetj.logkit.model.LogModel
 
 internal class KeywordFilter : Criteria<LogModel> {
 

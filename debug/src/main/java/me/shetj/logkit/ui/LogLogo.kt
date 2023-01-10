@@ -1,4 +1,4 @@
-package me.shetj.logkit
+package me.shetj.logkit.ui
 
 import android.R.layout
 import android.annotation.SuppressLint
@@ -8,7 +8,8 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PixelFormat
-import android.os.Build
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -22,11 +23,14 @@ import android.widget.ImageView
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.view.isVisible
 import com.google.android.material.badge.BadgeDrawable.*
-import me.shetj.logkit.Utils.drawableToBitmap
+import me.shetj.logkit.R
+import me.shetj.logkit.R.array
+import me.shetj.logkit.R.drawable
+import me.shetj.logkit.SLog
 import me.shetj.logkit.floatview.BaseFloatView
 import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
 import me.shetj.logkit.floatview.FloatKit.getWinManager
-import me.shetj.logkit.floatview.ViewRect
+import me.shetj.logkit.utils.Utils.drawableToBitmap
 
 
 internal class LogLogo @JvmOverloads constructor(
@@ -45,12 +49,12 @@ internal class LogLogo @JvmOverloads constructor(
                     context.packageManager.getApplicationIcon(context.applicationContext.packageName)
                 drawableToBitmap(drawableIcon) ?: throw PackageManager.NameNotFoundException()
             } catch (e: PackageManager.NameNotFoundException) {
-                BitmapFactory.decodeResource(resources, R.drawable.ic_launcher)
+                BitmapFactory.decodeResource(resources, drawable.ic_launcher)
             }
             val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, imageBitmap)
             roundedBitmapDrawable.setAntiAlias(true)
             unRead = findViewById(R.id.unRead)
-            imageView = findViewById<ImageView>(R.id.image)
+            imageView = findViewById(R.id.image)
             imageView!!.setImageDrawable(roundedBitmapDrawable)
             setViewClickInFloat (onClickListener = {
                 if (SLog.getInstance().isShowing()) {
@@ -62,7 +66,7 @@ internal class LogLogo @JvmOverloads constructor(
                 }
             },onLongClickListener = {
                 val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-                val priorityList: List<String> = resources.getStringArray(R.array.log_fun).toMutableList()
+                val priorityList: List<String> = resources.getStringArray(array.log_fun).toMutableList()
                 val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
                     context,
                     layout.simple_list_item_1,
@@ -77,13 +81,15 @@ internal class LogLogo @JvmOverloads constructor(
                              SLog.getInstance().startLogsActivity()
                          }
                          "Clear Log Files"->{
-                             SLog.getInstance().clear()
+                             SLog.getInstance().clearLogFile()
                          }
                          else ->{}
                      }
                 }
                 val dialog: AlertDialog = builder.create()
-                dialog.window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
+                if (VERSION.SDK_INT >= VERSION_CODES.O) {
+                    dialog.window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
+                }
                 dialog.show()
                 return@setViewClickInFloat true
             })
@@ -100,13 +106,12 @@ internal class LogLogo @JvmOverloads constructor(
 
 
     @Suppress("DEPRECATION")
-    override fun addToWindowManager(layout: ViewRect.() -> Unit) {
+    override fun addToWindowManager(layout: WindowManager.LayoutParams.() -> Unit) {
         if (context.checkFloatPermission()) {
             if (winManager == null) {
                 winManager = context.getWinManager()
-                val rect = ViewRect(0, 0, 0, 0).apply(layout)
                 val mWindowParams = LayoutParams()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (VERSION.SDK_INT >= VERSION_CODES.O) {
                     mWindowParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                 } else {
                     mWindowParams.type = WindowManager.LayoutParams.TYPE_PHONE
@@ -116,12 +121,7 @@ internal class LogLogo @JvmOverloads constructor(
                 mWindowParams.format = PixelFormat.TRANSLUCENT
                 mWindowParams.gravity = Gravity.START or Gravity.TOP
                 mWindowParams.dimAmount = 0.45f
-                windowParams = mWindowParams.apply {
-                    x = rect.x
-                    y = rect.y
-                    width = rect.width
-                    height = rect.height
-                }
+                windowParams = mWindowParams.apply(layout)
             }
         }
         if (this.parent != null) {

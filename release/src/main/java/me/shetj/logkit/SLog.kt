@@ -70,10 +70,6 @@ class SLog private constructor() {
 
     }
 
-    fun startLogsActivity() {
-
-    }
-
     fun setTag(tag: String) {
     }
 

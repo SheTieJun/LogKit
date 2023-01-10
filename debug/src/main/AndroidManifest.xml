@@ -12,7 +12,7 @@
             android:launchMode="singleTask"
             />
         <activity
-            android:name="me.shetj.logkit.LogFilesActivity"
+            android:name="me.shetj.logkit.ui.LogFilesActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:exported="false"
             android:launchMode="singleTask"/>

@@ -7,7 +7,6 @@ import android.os.IBinder
 import android.os.Looper
 import android.os.Message
 import android.os.Messenger
-import androidx.arch.core.executor.ArchTaskExecutor
 import me.shetj.logkit.LogLevel
 import me.shetj.logkit.SLog
 

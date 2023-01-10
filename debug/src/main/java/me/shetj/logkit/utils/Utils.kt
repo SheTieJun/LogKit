@@ -1,4 +1,4 @@
-package me.shetj.logkit
+package me.shetj.logkit.utils
 
 import android.content.res.Resources
 import android.graphics.Bitmap

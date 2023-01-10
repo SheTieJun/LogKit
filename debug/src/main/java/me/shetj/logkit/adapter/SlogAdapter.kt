@@ -1,4 +1,4 @@
-package me.shetj.logkit
+package me.shetj.logkit.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -12,7 +12,12 @@ import me.shetj.logkit.LogLevel.ERROR
 import me.shetj.logkit.LogLevel.INFO
 import me.shetj.logkit.LogLevel.VERBOSE
 import me.shetj.logkit.LogLevel.WARN
-import me.shetj.logkit.SlogAdapter.LogViewHolder
+import me.shetj.logkit.model.LogModel
+import me.shetj.logkit.R.drawable
+import me.shetj.logkit.R.id
+import me.shetj.logkit.R.layout
+import me.shetj.logkit.adapter.SlogAdapter.LogViewHolder
+import me.shetj.logkit.model.getLogPriorityInitials
 
 internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
     private var mFilteredLogList: List<LogModel>?
@@ -27,7 +32,7 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogViewHolder {
         return LogViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.list_item_log,
+                layout.list_item_log,
                 parent,
                 false
             )
@@ -65,7 +70,7 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
             holder.logMessage.maxLines = -1
         else
             holder.logMessage.maxLines = 1
-        holder.expandCollapseArrow.setImageResource(if (isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down)
+        holder.expandCollapseArrow.setImageResource(if (isExpanded) drawable.ic_arrow_up else drawable.ic_arrow_down)
         holder.itemView.setOnClickListener {
             mExpandedModel = if (isExpanded) null else model
             if (lastPosition != -1) {
@@ -111,7 +116,7 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
         else
             holder.logMessage.maxLines = 1
         holder.logTime.text = model.time
-        holder.expandCollapseArrow.setImageResource(if (isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down)
+        holder.expandCollapseArrow.setImageResource(if (isExpanded) drawable.ic_arrow_up else drawable.ic_arrow_down)
     }
 
 
@@ -126,10 +131,10 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
         var expandCollapseArrow: ImageView
 
         init {
-            logTag = itemView.findViewById(R.id.log_tag)
-            logMessage = itemView.findViewById(R.id.log_message)
-            logTime = itemView.findViewById(R.id.log_time)
-            expandCollapseArrow = itemView.findViewById(R.id.arrow_img)
+            logTag = itemView.findViewById(id.log_tag)
+            logMessage = itemView.findViewById(id.log_message)
+            logTime = itemView.findViewById(id.log_time)
+            expandCollapseArrow = itemView.findViewById(id.arrow_img)
         }
     }
 

@@ -34,10 +34,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
-import android.widget.Toast
-import kotlin.math.abs
-import me.shetj.logkit.LogLogo
-import me.shetj.logkit.SPUtils
+import me.shetj.logkit.ui.LogLogo
+import me.shetj.logkit.utils.SPUtils
 import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
 import me.shetj.logkit.floatview.FloatKit.getWinManager
 
@@ -81,16 +79,11 @@ internal abstract class BaseFloatView : FrameLayout {
      */
     abstract fun initView(context: Context)
 
-    open fun addToWindowManager(layout: ViewRect.() -> Unit) {
+    open fun addToWindowManager(layout: WindowManager.LayoutParams.() -> Unit) {
         if (context.checkFloatPermission()) {
             if (winManager == null) {
                 winManager = context.getWinManager()
-                val rect = ViewRect(0, 0, 0, 0).apply(layout)
-                windowParams = FloatKit.getWindowParams().apply {
-                    x = rect.x
-                    y = rect.y
-                    width = rect.width
-                    height = rect.height
+                windowParams = FloatKit.getWindowParams().apply(layout).apply{
                     if (VERSION.SDK_INT >= VERSION_CODES.S) {
                         blurBehindRadius = 20
                     }

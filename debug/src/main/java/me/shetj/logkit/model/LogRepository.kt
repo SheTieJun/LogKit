@@ -1,4 +1,4 @@
-package me.shetj.logkit
+package me.shetj.logkit.model
 
 import android.os.Handler
 import android.os.Looper

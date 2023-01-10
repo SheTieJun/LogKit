@@ -1,8 +1,11 @@
-package me.shetj.logkit
+package me.shetj.logkit.ui
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import me.shetj.logkit.LogRepository.ResultListener
+import me.shetj.logkit.LogLevel
+import me.shetj.logkit.model.LogModel
+import me.shetj.logkit.model.LogRepository
+import me.shetj.logkit.model.LogRepository.ResultListener
 
 internal class ContentViewModel(private val mVlogRepository: LogRepository) : ViewModel(), ResultListener {
 

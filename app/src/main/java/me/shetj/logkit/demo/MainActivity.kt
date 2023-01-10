@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(),SLog.SLogListener {
         Timber.plant(SLogTree())
 
         SLog.init(this)
-        SLog.getInstance().addLogListener(this)
+
         SLog.getInstance().start()
         findViewById<View>(R.id.addLog).setOnClickListener {
             launch {
@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity(),SLog.SLogListener {
                 SLog.getInstance().logWithFile(ERROR,"logWithFile","这是一条错误ERROR日志")
             }
         }
+        SLog.getInstance().addLogListener(this)
     }
 
     override fun onEnableChange(enable: Boolean) {

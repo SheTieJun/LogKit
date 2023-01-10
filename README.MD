@@ -1,5 +1,9 @@
 # Slog
 
+- 文件日志输出
+- 实时可视化界面
+- 日志过滤
+
 ## 初始化
 
 ```kotlin
@@ -56,10 +60,6 @@ Timber.plant(SLogTree())
 
 ```kotlin
 SLog.getInstance().logWithFile(VERBOSE, "logFile", "这是一条错误VERBOSE日志")
-SLog.getInstance().logWithFile(DEBUG, "logFile", "这是一条错误DEBUG日志")
-SLog.getInstance().logWithFile(INFO, "logFile", "这是一条错误INFO日志")
-SLog.getInstance().logWithFile(WARN, "logFile", "这是一条错误WARN日志")
-SLog.getInstance().logWithFile(ERROR, "logFile", "这是一条错误ERROR日志")
 ```
 
 文件命名：`[TAG]MM-dd HH时mm分`
