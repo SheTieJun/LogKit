@@ -5,11 +5,13 @@ import android.os.Looper
 import android.widget.Filter
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
+import me.shetj.logkit.LogLevel
 import me.shetj.logkit.filter.Criteria
 import me.shetj.logkit.filter.KeywordFilter
 import me.shetj.logkit.filter.PriorityFilter
 
 
+@Suppress("UNCHECKED_CAST")
 internal class LogRepository(private val mFilterDelay: Long = 100) : Filter() {
 
     private val handler: Handler = Handler(Looper.getMainLooper())

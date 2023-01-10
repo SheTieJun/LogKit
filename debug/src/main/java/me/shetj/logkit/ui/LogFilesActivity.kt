@@ -33,18 +33,18 @@ internal class LogFilesActivity : AppCompatActivity(), SLogListener {
                 }
 
             }.apply {
-                setOnItemClickListener { adapter, view, position ->
+                setOnItemClickListener { _, _, position ->
                     LogDesActivity.start(this@LogFilesActivity, getItem(position).file)
                 }
-                setOnItemLongClickListener { adapter, view, position ->
+                setOnItemLongClickListener { adapter, _, position ->
                     AlertDialog.Builder(this@LogFilesActivity)
                         .setTitle("是否删除该日志")
-                        .setNegativeButton("确定") { dialog, postion ->
+                        .setNegativeButton("确定") { _, _ ->
                             File(getItem(position).file).delete()
                             adapter.data.removeAt(position)
                             adapter.notifyItemRemoved(position)
                         }
-                        .setPositiveButton("取消") { dialog, postion ->
+                        .setPositiveButton("取消") { dialog, _ ->
                             dialog.cancel()
                         }.show()
                     return@setOnItemLongClickListener true
