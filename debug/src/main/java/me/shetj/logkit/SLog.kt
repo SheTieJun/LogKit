@@ -232,6 +232,9 @@ class SLog private constructor() {
     }
 
     private fun showLogLogo(): Boolean {
+        if (mContext?.get() == null) {
+            throw IllegalArgumentException(" should init first 需要先初始化 SLog.init(content)")
+        }
         if (mContext?.get()?.checkFloatPermission(true) == true) {
             mContext?.get()?.let {
                 if (logView == null) {

@@ -67,7 +67,7 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
         val isExpanded = model == mExpandedModel
         holder.logMessage.text = model.logMessage
         if (isExpanded)
-            holder.logMessage.maxLines = -1
+            holder.logMessage.maxLines = 100
         else
             holder.logMessage.maxLines = 1
         holder.expandCollapseArrow.setImageResource(if (isExpanded) drawable.ic_arrow_up else drawable.ic_arrow_down)
@@ -112,7 +112,7 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
         val isExpanded = model == mExpandedModel
         holder.logMessage.text = model.logMessage
         if (isExpanded)
-            holder.logMessage.maxLines = -1
+            holder.logMessage.maxLines = 100
         else
             holder.logMessage.maxLines = 1
         holder.logTime.text = model.time

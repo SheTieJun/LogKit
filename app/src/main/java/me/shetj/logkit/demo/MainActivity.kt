@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(),SLog.SLogListener {
     }
 
     override fun onEnableChange(enable: Boolean) {
-        //开关监听
+        SLog.getInstance().w(msg = "enable=$enable")
     }
 
     override fun onChatShowChange(isShow: Boolean) {
