@@ -79,7 +79,7 @@ internal class LogDesActivity : AppCompatActivity(), SLog.SLogListener {
         autoHideLiveData.throttleLast(30000).observe(this) {
             if (it) {
                 searchRoot?.isVisible = false
-                windowInsetsController.hide(WindowInsetsCompat.Type.ime())
+                windowInsetsController?.hide(WindowInsetsCompat.Type.ime())
             }
         }
 
@@ -139,7 +139,7 @@ internal class LogDesActivity : AppCompatActivity(), SLog.SLogListener {
 
 }
 
-internal val Activity.windowInsetsController: WindowInsetsControllerCompat
+internal val Activity.windowInsetsController: WindowInsetsControllerCompat?
     get() = WindowCompat.getInsetsController(window, findViewById(android.R.id.content))
 
 

@@ -5,6 +5,8 @@ import android.app.AlertDialog
 import android.content.Context
 import android.graphics.PixelFormat
 import android.os.Build
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.KeyEvent
@@ -18,7 +20,6 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -57,16 +58,23 @@ internal class LogChat @JvmOverloads constructor(
                 it.adapter = SlogAdapter().apply {
                     mAdapter = this
                 }
-                it.addItemDecoration(DividerItemDecoration(context,LinearLayout.VERTICAL))
+                it.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
             }
             findViewById<View>(R.id.clear_logs).setOnClickListener {
                 viewModel?.onClearLogs()
             }
 
-            findViewById<EditText>(R.id.editText)?.addTextChangedListener {
-                viewModel?.onKeywordEnter(it.toString())
-            }
+            findViewById<EditText>(R.id.editText)?.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                }
 
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    viewModel?.onKeywordEnter(s?.trimEnd().toString())
+                }
+            })
             findViewById<TextView>(R.id.log_priority_txtvw).apply {
                 setOnClickListener {
                     showPriorityOptions(context, this)
@@ -96,10 +104,10 @@ internal class LogChat @JvmOverloads constructor(
 
     override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
         when (event?.keyCode) {
-            KeyEvent.KEYCODE_BACK ->{
+            KeyEvent.KEYCODE_BACK -> {
                 SLog.getInstance().hideLogChat()
             }
-            else ->{}
+            else -> {}
         }
         return super.dispatchKeyEvent(event)
     }

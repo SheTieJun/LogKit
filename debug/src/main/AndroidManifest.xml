@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <application>
         <activity
-            android:name="me.shetj.logkit.LogDesActivity"
+            android:name=".ui.LogDesActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:exported="false"
             android:launchMode="singleTask"
