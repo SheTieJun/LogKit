@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/layout_bg"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="500dp"
+        app:behavior_peekHeight="400dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:orientation="vertical">
 

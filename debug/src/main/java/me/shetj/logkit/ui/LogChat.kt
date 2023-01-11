@@ -7,6 +7,7 @@ import android.graphics.PixelFormat
 import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,10 +41,6 @@ import me.shetj.logkit.floatview.FloatKit.getWinManager
 
 /**
  *
- * <b>@author：</b> shetj<br>
- * <b>@createTime：</b> 2022/12/19<br>
- * <b>@email：</b> 375105540@qq.com<br>
- * <b>@describe</b>  <br>
  */
 internal class LogChat @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -95,6 +92,16 @@ internal class LogChat @JvmOverloads constructor(
                 })
             }
         }
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
+        when (event?.keyCode) {
+            KeyEvent.KEYCODE_BACK ->{
+                SLog.getInstance().hideLogChat()
+            }
+            else ->{}
+        }
+        return super.dispatchKeyEvent(event)
     }
 
     override fun needUpdatePosition(): Boolean {

@@ -227,7 +227,7 @@ class SLog private constructor() {
      * 将日志保存到文件
      * @param log
      */
-    internal fun saveLogToFile(log: LogModel) {
+    private fun saveLogToFile(log: LogModel) {
         outputToFile(log, getTodayLogFile(log.tag))
     }
 
