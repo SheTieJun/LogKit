@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity(),SLog.SLogListener {
 
         SLog.init(this)
 
-        SLog.getInstance().start()
         findViewById<View>(R.id.addLog).setOnClickListener {
             launch {
                 repeat(50) {

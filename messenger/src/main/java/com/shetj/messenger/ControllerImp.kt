@@ -80,6 +80,28 @@ internal class ControllerImp private constructor() : Controller {
         }
     }
 
+    override fun sendToServer(isHide:Boolean) {
+        if (!isBind) {
+            Log.d(TAG, " sdk u must should bindService ")
+            if (packageName != null && mContext != null) {
+                bindService(mContext!!, packageName!!)
+            }
+            return
+        }
+        try {
+            Message.obtain(null, 6002).apply {
+                data = Bundle().apply {
+                    putBoolean("isHide", isHide)
+                }
+                replyTo = mClientMessenger
+            }.also {
+                mService?.send(it)
+            }
+        } catch (var3: RemoteException) {
+            var3.printStackTrace()
+        }
+    }
+
     /**
      * unbind
      */

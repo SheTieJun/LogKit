@@ -3,6 +3,7 @@
 - 文件日志输出
 - 实时可视化界面
 - 日志过滤
+- 监测前后自动隐藏悬浮窗
 
 ## 初始化
 
@@ -67,6 +68,12 @@ SLog + [HttpSLogInterceptor](app/src/main/java/me/shetj/logkit/HttpSLogIntercept
 SLog.getInstance().logWithFile(VERBOSE, "logFile", "这是一条错误VERBOSE日志")
 ```
 
+## 自动检测前后台变化，隐藏日志相关悬浮窗
+```groovy
+//true 开启，false 关闭
+SLog.getInstance().autoHide(context,true)
+```
+
 文件命名：`[TAG]MM-dd HH时mm分`
 
 > 按TAG和每分钟进行输出文件，方便查找
@@ -106,3 +113,4 @@ Step 2. Add the dependency
 ## ToDo
 
 - [X] ~~增加通过悬浮球关闭整个日志功能 : 长按弹窗关闭~~
+- [X] ~~增加隱藏方法：检测APP是否在前台（如果启动就显示）或者后台（自动隐藏悬浮窗）~~

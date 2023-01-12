@@ -1,5 +1,6 @@
 package com.shetj.messenger
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 
@@ -7,6 +8,9 @@ import android.util.Log
 open class SLogMessenger {
 
     private var msgTag = TAG
+    private var isHideLogo = false
+    private var isAutoHide = false
+    private val activityLifecycleCallbacks by lazy { SLogActivityLifecycleCallbacks() }
 
     companion object {
         const val TAG = "SLogMessenger"
@@ -53,8 +57,21 @@ open class SLogMessenger {
         context: Context,
         packageName: String,
     ): Int {
+        autoHide(context,true)
         mController = ControllerImp.instance
         return mController!!.bindService(context, packageName)
+    }
+
+    fun autoHide(context: Context, isAuto: Boolean = true) {
+        val application = context.applicationContext as Application
+        isAutoHide = if (isAuto && !isAutoHide) {
+            application.registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
+            true
+        } else {
+            application.registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
+            showLogo()
+            false
+        }
     }
 
     fun setTag(tag: String) {
@@ -114,6 +131,29 @@ open class SLogMessenger {
         mInstance?.unBindService()
         ControllerImp.destroy()
         mInstance = null
+    }
+
+
+    internal fun hideLogo() {
+        if (!isHideLogo) {
+            isHideLogo = true
+            mController?.sendToServer(isHide = true)
+                ?: kotlin.run {
+                    Log.i(TAG, "error : sendToServer: u should bindService first")
+                    isHideLogo = false
+                }
+        }
+    }
+
+    internal fun showLogo() {
+        if (isHideLogo) {
+            isHideLogo = false
+            mController?.sendToServer(isHide = false)
+                ?: kotlin.run {
+                    Log.i(TAG, "error : sendToServer: u should bindService first")
+                    isHideLogo = true
+                }
+        }
     }
 
 }

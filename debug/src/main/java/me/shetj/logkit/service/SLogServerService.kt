@@ -8,14 +8,17 @@ import android.os.Looper
 import android.os.Message
 import android.os.Messenger
 import me.shetj.logkit.SLog
-import me.shetj.logkit.model.getLogLevelByInt
+import me.shetj.logkit.getLogLevelByInt
 
 class SLogServerService : Service() {
 
     companion object{
         const val MESSAGE_FROM_CLIENT = 6001
+        const val MESSAGE_FROM_CLIENT_HIDE = 6002
+
         const val KEY_MSG = "SLog"
         const val KEY_TAG = "tag"
+        const val KEY_HIDE = "isHide"
     }
 
     override fun onCreate() {
@@ -36,6 +39,14 @@ class SLogServerService : Service() {
                      }else{
                          SLog.getInstance().log(getLogLevelByInt(message.arg1),tag,msg)
                      }
+                }
+                MESSAGE_FROM_CLIENT_HIDE->{
+                    val msg = message.data.getBoolean(KEY_HIDE)
+                    if (msg){
+                        SLog.getInstance().hideLogo()
+                    }else{
+                        SLog.getInstance().showLogo()
+                    }
                 }
                 else -> super.handleMessage(message)
             }

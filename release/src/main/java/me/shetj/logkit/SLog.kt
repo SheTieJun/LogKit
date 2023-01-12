@@ -63,6 +63,8 @@ class SLog private constructor() {
     fun initContext(context: Context) {
     }
 
+    fun autoHide(isAuto: Boolean = true) {}
+
     fun start() {
 
     }

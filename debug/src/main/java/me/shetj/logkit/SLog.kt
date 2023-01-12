@@ -1,6 +1,7 @@
 package me.shetj.logkit
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
@@ -22,12 +23,11 @@ import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
 import me.shetj.logkit.model.LogFileInfo
 import me.shetj.logkit.model.LogModel
 import me.shetj.logkit.model.LogRepository
-import me.shetj.logkit.model.getLogLevelByInt
-import me.shetj.logkit.model.getLogPriorityInitials
 import me.shetj.logkit.ui.ContentViewModel
 import me.shetj.logkit.ui.LogChat
 import me.shetj.logkit.ui.LogFilesActivity
 import me.shetj.logkit.ui.LogLogo
+import me.shetj.logkit.utils.SLogActivityLifecycleCallbacks
 import me.shetj.logkit.utils.SPUtils
 import me.shetj.logkit.utils.lineString
 
@@ -49,6 +49,9 @@ class SLog private constructor() {
     private val mSLogListeners: CopyOnWriteArrayList<SLogListener> by lazy { CopyOnWriteArrayList() }
     private val formatFileName = SimpleDateFormat("MM-dd HH时mm分", Locale.getDefault())
     private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+    private var isHideLogo = false
+    private var isAutoHide = false
+    private val activityLifecycleCallbacks by lazy {  SLogActivityLifecycleCallbacks() }
 
     companion object {
 
@@ -99,6 +102,7 @@ class SLog private constructor() {
         fun d(tag: String, msg: String) {
             getInstance().d(tag, msg)
         }
+
         fun i(tag: String, msg: String) {
             getInstance().i(tag, msg)
         }
@@ -114,10 +118,26 @@ class SLog private constructor() {
 
 
     //region 必须设置
-    fun initContext(context: Context) {
+    fun initContext(context: Context,autoHide:Boolean = true) {
         if (mContext?.get() == null) {
             mContext = WeakReference(context.applicationContext)
+            autoHide(autoHide)
             autoClearLogFile()
+        }
+    }
+
+    fun autoHide(isAuto:Boolean = true){
+        if (mContext?.get() == null) {
+            throw IllegalArgumentException(" should init first 需要先初始化 SLog.init(content)")
+        }
+        val application = mContext?.get()!!.applicationContext as Application
+        isAutoHide = if (isAuto && !isAutoHide){
+            application.registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
+            true
+        }else{
+            application.registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
+            showLogo()
+            false
         }
     }
 
@@ -206,13 +226,13 @@ class SLog private constructor() {
     }
 
     @JvmOverloads
-    fun log(level: LogLevel,tag: String = mTag, msg: String) {
+    fun log(level: LogLevel, tag: String = mTag, msg: String) {
         val model = LogModel(level, tag, msg, nowTs())
         feed(model)
     }
 
     @JvmOverloads
-    fun log(priority:Int,tag: String = mTag, msg: String){
+    fun log(priority: Int, tag: String = mTag, msg: String) {
         val model = LogModel(getLogLevelByInt(priority), tag, msg, nowTs())
         feed(model)
     }
@@ -236,7 +256,7 @@ class SLog private constructor() {
     }
 
     fun logFile(
-        priority:Int = Log.INFO,
+        priority: Int = Log.INFO,
         tag: String = mTag,
         log: String,
         isCall: Boolean = true
@@ -403,6 +423,21 @@ class SLog private constructor() {
 
     internal fun isShowing(): Boolean {
         return isShowChat
+    }
+
+    internal fun hideLogo() {
+        if (!isHideLogo && isEnable()) {
+            hideLogLogo()
+            hideLogChat()
+            isHideLogo = true
+        }
+    }
+
+    internal fun showLogo() {
+        if (isHideLogo && isEnable()) {
+            showLogLogo()
+            isHideLogo = false
+        }
     }
 
     interface SLogListener {

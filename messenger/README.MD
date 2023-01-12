@@ -1,5 +1,5 @@
 ## 跨应用调试,基于Messenger
-
+(不推荐使用，非必要不要使用这种方式集成)
 1. 在项目添加
 
 ```groovy 
@@ -70,6 +70,13 @@ class SLogMessengerTree : Timber.Tree() {
     }
 }
 ```
+
+7.自动检测前后台变化，隐藏悬浮窗
+```groovy
+//true 开启，false 关闭
+SLogMessenger.getInstance().autoHide(context,true)
+```
+
 
 ## 建议
 
