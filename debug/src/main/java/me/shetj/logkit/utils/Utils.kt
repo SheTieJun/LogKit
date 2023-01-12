@@ -1,5 +1,8 @@
 package me.shetj.logkit.utils
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Bitmap.Config.ARGB_8888
@@ -51,6 +54,15 @@ internal object Utils {
             e.printStackTrace()
             null
         }
+    }
+
+    fun copyText(context: Context, text: String) {
+        val cm: ClipboardManager? =
+            context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+        // 创建普通字符型ClipData
+        val mClipData = ClipData.newPlainText("Label", text)
+        // 将ClipData内容放到系统剪贴板里。
+        cm?.setPrimaryClip(mClipData)
     }
 }
 

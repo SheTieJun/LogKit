@@ -1,6 +1,7 @@
 package me.shetj.logkit
 
 import android.content.Context
+import android.util.Log
 import me.shetj.logkit.LogLevel.INFO
 
 @Suppress("unused", "UNUSED_PARAMETER")
@@ -104,12 +105,29 @@ class SLog private constructor() {
     fun e(tag: String = mTag, msg: String) {
     }
 
-    fun logWithFile(
+    @JvmOverloads
+    fun log(level: LogLevel, tag: String = mTag, msg: String) {
+    }
+
+    @JvmOverloads
+    fun log(priority: Int, tag: String = mTag, msg: String) {
+    }
+
+    fun logFile(
         logLevel: LogLevel = INFO,
         tag: String = mTag,
         log: String,
         isCall: Boolean = true
-    ) {}
+    ) {
+    }
+
+    fun logFile(
+        priority: Int = Log.INFO,
+        tag: String = mTag,
+        log: String,
+        isCall: Boolean = true
+    ) {
+    }
 
     fun addLogListener(listener: SLogListener) {
 

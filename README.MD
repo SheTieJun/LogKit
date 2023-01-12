@@ -51,10 +51,15 @@ class SLogTree : Timber.Tree() {
             Log.ERROR -> slog.e(tag, message)
             else -> slog.v(tag, message)
         }
+        //slog.log(priority,s,message)
     }
 }
 Timber.plant(SLogTree())
 ```
+
+### 拦截网络请求
+
+SLog + [HttpSLogInterceptor](app/src/main/java/me/shetj/logkit/HttpSLogInterceptor.kt),达到输出网络请求
 
 ## 添加日志到文件
 

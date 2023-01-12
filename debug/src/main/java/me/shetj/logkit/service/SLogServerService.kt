@@ -7,8 +7,8 @@ import android.os.IBinder
 import android.os.Looper
 import android.os.Message
 import android.os.Messenger
-import me.shetj.logkit.LogLevel
 import me.shetj.logkit.SLog
+import me.shetj.logkit.model.getLogLevelByInt
 
 class SLogServerService : Service() {
 
@@ -31,50 +31,10 @@ class SLogServerService : Service() {
                      val msg = message.data.getString(KEY_MSG)?:return
                      val tag = message.data.getString(KEY_TAG)?:return
                      val pushFile = message.data.getBoolean("pushFile",false)
-
                      if (pushFile){
-                         val level = when(message.arg1){
-                             0 ->{
-                                 LogLevel.VERBOSE
-                             }
-                             1 ->{
-                                 LogLevel.DEBUG
-                             }
-                             2 ->{
-                                 LogLevel.INFO
-                             }
-                             3 ->{
-                                 LogLevel.WARN
-                             }
-                             4 ->{
-                                 LogLevel.ERROR
-                             }
-                             else->{
-                                 LogLevel.DEBUG
-                             }
-                         }
-                         SLog.getInstance().logWithFile(level,tag,msg,isCall = true)
+                         SLog.getInstance().logFile(getLogLevelByInt(message.arg1),tag,msg, true)
                      }else{
-                         when(message.arg1){
-                             0 ->{
-                                 SLog.getInstance().v(tag,msg)
-                             }
-                             1 ->{
-                                 SLog.getInstance().d(tag,msg)
-                             }
-                             2 ->{
-                                 SLog.getInstance().i(tag,msg)
-                             }
-                             3 ->{
-                                 SLog.getInstance().w(tag,msg)
-                             }
-                             4 ->{
-                                 SLog.getInstance().e(tag,msg)
-                             }
-                             else->{
-                                 SLog.getInstance().d(tag,msg)
-                             }
-                         }
+                         SLog.getInstance().log(getLogLevelByInt(message.arg1),tag,msg)
                      }
                 }
                 else -> super.handleMessage(message)

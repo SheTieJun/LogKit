@@ -67,34 +67,39 @@ open class SLogMessenger {
 
     @JvmOverloads
     fun v(tag: String = msgTag, msg: String, pushFile: Boolean = false) {
-        mController?.sendToServer(0, tag, msg, pushFile)
+        mController?.sendToServer(Log.VERBOSE, tag, msg, pushFile)
             ?: Log.i(TAG, "error : sendToServer: u should bindService first")
     }
 
     @JvmOverloads
     fun d(tag: String = msgTag, msg: String, pushFile: Boolean = false) {
-        mController?.sendToServer(1, tag, msg, pushFile)
+        mController?.sendToServer(Log.DEBUG, tag, msg, pushFile)
             ?: Log.i(TAG, "error : sendToServer: u should bindService first")
     }
 
     @JvmOverloads
     fun i(tag: String = msgTag, msg: String, pushFile: Boolean = false) {
-        mController?.sendToServer(2, tag, msg, pushFile)
+        mController?.sendToServer(Log.INFO, tag, msg, pushFile)
             ?: Log.i(TAG, "error : sendToServer: u should bindService first")
     }
 
     @JvmOverloads
     fun w(tag: String = msgTag, msg: String, pushFile: Boolean = false) {
-        mController?.sendToServer(3, tag, msg, pushFile)
+        mController?.sendToServer(Log.WARN, tag, msg, pushFile)
             ?: Log.i(TAG, "error : sendToServer: u should bindService first")
     }
 
     @JvmOverloads
     fun e(tag: String = msgTag, msg: String, pushFile: Boolean = false) {
-        mController?.sendToServer(4, tag, msg, pushFile)
+        mController?.sendToServer(Log.ERROR, tag, msg, pushFile)
             ?: Log.i(TAG, "error : sendToServer: u should bindService first")
     }
 
+    @JvmOverloads
+    fun log(priority: Int, tag: String, msg: String, pushFile: Boolean = false) {
+        mController?.sendToServer(priority, tag, msg, pushFile)
+            ?: Log.i(TAG, "error : sendToServer: u should bindService first")
+    }
 
     fun unBindService() {
         mController?.unBindService()

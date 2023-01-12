@@ -52,11 +52,11 @@ class MainActivity : AppCompatActivity(),SLog.SLogListener {
 
         findViewById<View>(R.id.addLogWithFile).setOnClickListener {
             launch {
-                SLog.getInstance().logWithFile(VERBOSE,"logWithFile","这是一条错误VERBOSE日志")
-                SLog.getInstance().logWithFile(DEBUG,"logWithFile","这是一条错误DEBUG日志")
-                SLog.getInstance().logWithFile(INFO,"logWithFile","这是一条错误INFO日志")
-                SLog.getInstance().logWithFile(WARN,"logWithFile","这是一条错误WARN日志")
-                SLog.getInstance().logWithFile(ERROR,"logWithFile","这是一条错误ERROR日志")
+                SLog.getInstance().logFile(VERBOSE,"logWithFile","这是一条错误VERBOSE日志")
+                SLog.getInstance().logFile(DEBUG,"logWithFile","这是一条错误DEBUG日志")
+                SLog.getInstance().logFile(INFO,"logWithFile","这是一条错误INFO日志")
+                SLog.getInstance().logFile(WARN,"logWithFile","这是一条错误WARN日志")
+                SLog.getInstance().logFile(ERROR,"logWithFile","这是一条错误ERROR日志")
             }
         }
         SLog.getInstance().addLogListener(this)

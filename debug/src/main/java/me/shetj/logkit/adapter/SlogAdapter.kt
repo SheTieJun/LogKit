@@ -6,27 +6,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import me.shetj.logkit.LogLevel.DEBUG
 import me.shetj.logkit.LogLevel.ERROR
 import me.shetj.logkit.LogLevel.INFO
 import me.shetj.logkit.LogLevel.VERBOSE
 import me.shetj.logkit.LogLevel.WARN
+import me.shetj.logkit.R
 import me.shetj.logkit.model.LogModel
 import me.shetj.logkit.R.drawable
 import me.shetj.logkit.R.id
 import me.shetj.logkit.R.layout
+import me.shetj.logkit.SLog
 import me.shetj.logkit.adapter.SlogAdapter.LogViewHolder
 import me.shetj.logkit.model.getLogPriorityInitials
+import me.shetj.logkit.utils.Utils
 
 internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
     private var mFilteredLogList: List<LogModel>?
-    private var mExpandedModel: LogModel? = null
+    private var mExpandedPosition: Int? = null
     private var lastPosition = -1
     private val errorColor = Color.parseColor("#E64A19")
-    private val warnColor =  Color.parseColor("#FFC107")
+    private val warnColor = Color.parseColor("#FFC107")
     private val infoColor = Color.parseColor("#4CAF50")
-    private val debugColor =  Color.parseColor("#34363A")
+    private val debugColor = Color.parseColor("#34363A")
     private val defaultColor = Color.parseColor("#1976D2")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogViewHolder {
@@ -64,20 +68,23 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
             }
         }
         holder.logTag.text = getLogPriorityInitials(model.logLevel) + "/" + model.tag + ": "
-        val isExpanded = model == mExpandedModel
+        val isExpanded = position == mExpandedPosition
         holder.logMessage.text = model.logMessage
         if (isExpanded)
             holder.logMessage.maxLines = 100
         else
             holder.logMessage.maxLines = 1
-        holder.expandCollapseArrow.setImageResource(if (isExpanded) drawable.ic_arrow_up else drawable.ic_arrow_down)
+        holder.expandCollapseArrow.setImageResource(if (isExpanded) drawable.log_ic_arrow_up else drawable.log_ic_arrow_down)
         holder.itemView.setOnClickListener {
-            mExpandedModel = if (isExpanded) null else model
+            mExpandedPosition = if (isExpanded) null else position
             if (lastPosition != -1) {
                 notifyItemChanged(lastPosition, 1)
             }
             lastPosition = position
             notifyItemChanged(position, 1)
+        }
+        holder.copy.setOnClickListener {
+            Utils.copyText(it.context, model.logMessage)
         }
         holder.logTime.text = model.time
     }
@@ -109,14 +116,14 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
             }
         }
         holder.logTag.text = getLogPriorityInitials(model.logLevel) + "/" + model.tag + ": "
-        val isExpanded = model == mExpandedModel
+        val isExpanded = position == mExpandedPosition
         holder.logMessage.text = model.logMessage
         if (isExpanded)
             holder.logMessage.maxLines = 100
         else
             holder.logMessage.maxLines = 1
         holder.logTime.text = model.time
-        holder.expandCollapseArrow.setImageResource(if (isExpanded) drawable.ic_arrow_up else drawable.ic_arrow_down)
+        holder.expandCollapseArrow.setImageResource(if (isExpanded) drawable.log_ic_arrow_up else drawable.log_ic_arrow_down)
     }
 
 
@@ -129,12 +136,14 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
         var logTime: TextView
         var logMessage: TextView
         var expandCollapseArrow: ImageView
+        var copy: ImageView
 
         init {
             logTag = itemView.findViewById(id.log_tag)
             logMessage = itemView.findViewById(id.log_message)
             logTime = itemView.findViewById(id.log_time)
             expandCollapseArrow = itemView.findViewById(id.arrow_img)
+            copy = itemView.findViewById(R.id.copy)
         }
     }
 

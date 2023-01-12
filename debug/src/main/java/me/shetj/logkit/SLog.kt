@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.util.Log
+import androidx.annotation.MainThread
 import androidx.arch.core.executor.ArchTaskExecutor
 import java.io.File
 import java.lang.ref.WeakReference
@@ -20,6 +22,7 @@ import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
 import me.shetj.logkit.model.LogFileInfo
 import me.shetj.logkit.model.LogModel
 import me.shetj.logkit.model.LogRepository
+import me.shetj.logkit.model.getLogLevelByInt
 import me.shetj.logkit.model.getLogPriorityInitials
 import me.shetj.logkit.ui.ContentViewModel
 import me.shetj.logkit.ui.LogChat
@@ -53,6 +56,7 @@ class SLog private constructor() {
         private var sLog: SLog? = null
 
         @JvmStatic
+        @MainThread
         fun init(context: Context): SLog {
             return getInstance().also {
                 it.initContext(context)
@@ -88,7 +92,6 @@ class SLog private constructor() {
             getInstance().e(msg = msg)
         }
 
-
         fun v(tag: String, msg: String) {
             getInstance().v(tag, msg)
         }
@@ -96,7 +99,6 @@ class SLog private constructor() {
         fun d(tag: String, msg: String) {
             getInstance().d(tag, msg)
         }
-
         fun i(tag: String, msg: String) {
             getInstance().i(tag, msg)
         }
@@ -203,19 +205,43 @@ class SLog private constructor() {
         feed(model)
     }
 
+    @JvmOverloads
+    fun log(level: LogLevel,tag: String = mTag, msg: String) {
+        val model = LogModel(level, tag, msg, nowTs())
+        feed(model)
+    }
+
+    @JvmOverloads
+    fun log(priority:Int,tag: String = mTag, msg: String){
+        val model = LogModel(getLogLevelByInt(priority), tag, msg, nowTs())
+        feed(model)
+    }
 
     /**
      * 记录并归档
      * @param log 日志信息
      * @param isCall 是否在view中显示
      */
-    fun logWithFile(
+    fun logFile(
         logLevel: LogLevel = INFO,
         tag: String = mTag,
         log: String,
         isCall: Boolean = true
     ) {
         val logModel = LogModel(logLevel, tag, log, nowTs())
+        if (isCall) {
+            feed(logModel)
+        }
+        saveLogToFile(logModel)
+    }
+
+    fun logFile(
+        priority:Int = Log.INFO,
+        tag: String = mTag,
+        log: String,
+        isCall: Boolean = true
+    ) {
+        val logModel = LogModel(getLogLevelByInt(priority), tag, log, nowTs())
         if (isCall) {
             feed(logModel)
         }
