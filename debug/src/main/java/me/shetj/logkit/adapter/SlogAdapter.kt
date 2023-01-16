@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import me.shetj.logkit.LogLevel.DEBUG
 import me.shetj.logkit.LogLevel.ERROR
@@ -18,9 +17,8 @@ import me.shetj.logkit.model.LogModel
 import me.shetj.logkit.R.drawable
 import me.shetj.logkit.R.id
 import me.shetj.logkit.R.layout
-import me.shetj.logkit.SLog
 import me.shetj.logkit.adapter.SlogAdapter.LogViewHolder
-import me.shetj.logkit.model.getLogPriorityInitials
+import me.shetj.logkit.getLogPriorityInitials
 import me.shetj.logkit.utils.Utils
 
 internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
@@ -70,10 +68,14 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
         holder.logTag.text = getLogPriorityInitials(model.logLevel) + "/" + model.tag + ": "
         val isExpanded = position == mExpandedPosition
         holder.logMessage.text = model.logMessage
-        if (isExpanded)
-            holder.logMessage.maxLines = 100
-        else
-            holder.logMessage.maxLines = 1
+        if (isExpanded){
+            holder.logMessage.maxLines = (100)
+            holder.logMessage.isSingleLine = false
+        } else{
+            holder.logMessage.setLines(1)
+            holder.logMessage.maxLines = (1)
+            holder.logMessage.isSingleLine = true
+        }
         holder.expandCollapseArrow.setImageResource(if (isExpanded) drawable.log_ic_arrow_up else drawable.log_ic_arrow_down)
         holder.itemView.setOnClickListener {
             mExpandedPosition = if (isExpanded) null else position
@@ -118,10 +120,14 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
         holder.logTag.text = getLogPriorityInitials(model.logLevel) + "/" + model.tag + ": "
         val isExpanded = position == mExpandedPosition
         holder.logMessage.text = model.logMessage
-        if (isExpanded)
-            holder.logMessage.maxLines = 100
-        else
-            holder.logMessage.maxLines = 1
+        if (isExpanded){
+            holder.logMessage.maxLines = (100)
+            holder.logMessage.isSingleLine = false
+        } else{
+            holder.logMessage.setLines(1)
+            holder.logMessage.maxLines = (1)
+            holder.logMessage.isSingleLine = true
+        }
         holder.logTime.text = model.time
         holder.expandCollapseArrow.setImageResource(if (isExpanded) drawable.log_ic_arrow_up else drawable.log_ic_arrow_down)
     }

@@ -65,7 +65,7 @@ SLog + [HttpSLogInterceptor](app/src/main/java/me/shetj/logkit/HttpSLogIntercept
 ## 添加日志到文件
 
 ```kotlin
-SLog.getInstance().logWithFile(VERBOSE, "logFile", "这是一条错误VERBOSE日志")
+SLog.getInstance().logFile(VERBOSE, "logFile", "这是一条错误VERBOSE日志")
 ```
 
 ## 自动检测前后台变化，隐藏日志相关悬浮窗
