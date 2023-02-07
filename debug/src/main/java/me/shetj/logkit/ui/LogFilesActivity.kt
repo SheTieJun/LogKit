@@ -1,6 +1,10 @@
 package me.shetj.logkit.ui
 
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.view.WindowManager
+import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -8,14 +12,16 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
-import me.shetj.logkit.adapter.BaseViewHolder
-import me.shetj.logkit.model.LogFileInfo
 import me.shetj.logkit.R
+import me.shetj.logkit.R.array
 import me.shetj.logkit.R.id
 import me.shetj.logkit.R.layout
 import me.shetj.logkit.SLog
 import me.shetj.logkit.SLog.SLogListener
 import me.shetj.logkit.adapter.BaseAdapter
+import me.shetj.logkit.adapter.BaseViewHolder
+import me.shetj.logkit.model.LogFileInfo
+import me.shetj.logkit.utils.shareFile
 
 internal class LogFilesActivity : AppCompatActivity(), SLogListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,16 +43,43 @@ internal class LogFilesActivity : AppCompatActivity(), SLogListener {
                     LogDesActivity.start(this@LogFilesActivity, getItem(position).file)
                 }
                 setOnItemLongClickListener { adapter, _, position ->
-                    AlertDialog.Builder(this@LogFilesActivity)
-                        .setTitle("是否删除该日志")
-                        .setNegativeButton("确定") { _, _ ->
-                            File(getItem(position).file).delete()
-                            adapter.data.removeAt(position)
-                            adapter.notifyItemRemoved(position)
+                    val item = getItem(position)
+
+                    val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
+                    val priorityList: List<String> = resources.getStringArray(array.log_case).toMutableList()
+                    val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+                        context,
+                        android.R.layout.simple_list_item_1,
+                        priorityList
+                    )
+                    builder.setAdapter(arrayAdapter) { _, selectedIndex ->
+                        when(priorityList[selectedIndex]){
+                            "Open File"->{
+                                LogDesActivity.start(this@LogFilesActivity, item.file)
+                            }
+                            "Delete File" ->{
+                                AlertDialog.Builder(this@LogFilesActivity)
+                                    .setTitle("是否删除该日志")
+                                    .setNegativeButton("确定") { _, _ ->
+                                        File(item.file).delete()
+                                        adapter.data.removeAt(position)
+                                        adapter.notifyItemRemoved(position)
+                                    }
+                                    .setPositiveButton("取消") { dialog, _ ->
+                                        dialog.cancel()
+                                    }.show()
+                            }
+                            "Share File" ->{
+                                shareFile(item.name,item.file)
+                            }
+                            else ->{}
                         }
-                        .setPositiveButton("取消") { dialog, _ ->
-                            dialog.cancel()
-                        }.show()
+                    }
+                    val dialog: android.app.AlertDialog = builder.create()
+                    if (VERSION.SDK_INT >= VERSION_CODES.O) {
+                        dialog.window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
+                    }
+                    dialog.show()
                     return@setOnItemLongClickListener true
                 }
             }

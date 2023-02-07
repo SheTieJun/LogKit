@@ -3,6 +3,7 @@ package me.shetj.logkit.utils
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Bitmap.Config.ARGB_8888
@@ -11,8 +12,9 @@ import android.graphics.Canvas
 import android.graphics.PixelFormat
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.os.Build
-import android.view.WindowManager
+import android.net.Uri
+import androidx.core.content.FileProvider
+import java.io.File
 
 internal object Utils {
 
@@ -67,3 +69,23 @@ internal object Utils {
 }
 
 internal val lineString: String? = System.getProperty("line.separator")
+
+fun Context.shareFile(title:String?,fileUrl:String?) {
+    val uri =
+        FileProvider.getUriForFile(this, "$packageName.FileProvider", File(fileUrl))
+    var shareIntent = createShareIntent(uri)
+    shareIntent = Intent.createChooser(shareIntent, title)
+    startActivity(shareIntent)
+}
+
+private fun createShareIntent(url: Uri): Intent {
+    val shareIntent = Intent()
+    shareIntent.action = Intent.ACTION_SEND
+    shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    shareIntent.addCategory("android.intent.category.DEFAULT")
+    shareIntent.type = "*/*"
+    shareIntent.putExtra(Intent.EXTRA_STREAM, url)
+    shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    return shareIntent
+}

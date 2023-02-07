@@ -15,6 +15,13 @@
         <item>Exit SLog</item>
     </string-array>
 
+
+    <string-array name="log_case">
+        <item>Open File</item>
+        <item>Delete File</item>
+        <item>Share File</item>
+    </string-array>
+
     <color name="background">#35383F</color>
     <color name="editTextColor">#35383F</color>
     <color name="editTextColorHint">#7735383F</color>

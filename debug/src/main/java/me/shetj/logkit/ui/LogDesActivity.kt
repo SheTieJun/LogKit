@@ -18,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.arch.core.executor.ArchTaskExecutor
+import androidx.core.content.FileProvider.*
 import androidx.core.os.HandlerCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -33,6 +34,7 @@ import java.util.regex.Pattern
 import me.shetj.logkit.R
 import me.shetj.logkit.SLog
 import me.shetj.logkit.utils.lineString
+import me.shetj.logkit.utils.shareFile
 
 internal class LogDesActivity : AppCompatActivity(), SLog.SLogListener {
 
@@ -109,9 +111,13 @@ internal class LogDesActivity : AppCompatActivity(), SLog.SLogListener {
                     autoHideLiveData.postValue(false)
                 }
             }
+            R.id.menuShare -> {
+                shareFile(title.toString(),intent.getStringExtra("file"))
+            }
         }
         return super.onOptionsItemSelected(item)
     }
+
 
     private fun searchHighlight(sourceStr: String, searchString: String) {
         val s = SpannableString(sourceStr);

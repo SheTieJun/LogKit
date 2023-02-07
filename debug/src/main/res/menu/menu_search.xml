@@ -5,4 +5,8 @@
         android:id="@+id/menuSearch"
         android:title="搜索"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/menuShare"
+        android:title="分享"
+        app:showAsAction="never" />
 </menu>
