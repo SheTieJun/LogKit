@@ -1,16 +1,12 @@
 package me.shetj.logkit.demo
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.delay
 import me.shetj.base.ktx.launch
 import me.shetj.base.ktx.logE
 import me.shetj.base.ktx.logI
-import me.shetj.base.ktx.startActivityResult
 import me.shetj.logkit.LogLevel.DEBUG
 import me.shetj.logkit.LogLevel.ERROR
 import me.shetj.logkit.LogLevel.INFO
@@ -35,22 +31,26 @@ class MainActivity : AppCompatActivity(), SLog.SLogListener {
         findViewById<View>(R.id.addLog).setOnClickListener {
             launch {
                 repeat(50) {
-                    SLog.v("ERROR:Uncaught TypeError: window.VConsole is not a constructor\n" +
-                            "sourceID: 1 ,lineNumber:  1")
+                    SLog.v(
+                        "ERROR:Uncaught TypeError: window.VConsole is not a constructor\n" +
+                                "sourceID: 1 ,lineNumber:  1"
+                    )
                     ("这是一条info;info日志：$it").logI()
                     ("这是一条错误错误日志：$it").logE()
                     SLog.w("[INFO:CONSOLE(1)] \"Uncaught TypeError: window.VConsole is not a constructor\", source:  (1)")
-                    SLog.d("这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志\"" +
-                            "这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志" +
-                            "这是一\"这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条Debug日志这是一条Deb" +
-                            "ug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条Debug日志这是一条Deb" +
-                            "ug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条Debug日志这是一条Debu" +
-                            "g日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条Debug日志这是" +
-                            "一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条Debug日" +
-                            "志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条Debu" +
-                            "g日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条D" +
-                            "这是一条Debug日志这是一条Debug日志这是一\"这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是" +
-                            "一条Debug日志这是一这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志$it")
+                    SLog.d(
+                        "这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志\"" +
+                                "这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志" +
+                                "这是一\"这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条Debug日志这是一条Deb" +
+                                "ug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条Debug日志这是一条Deb" +
+                                "ug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条Debug日志这是一条Debu" +
+                                "g日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条Debug日志这是" +
+                                "一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条Debug日" +
+                                "志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条Debu" +
+                                "g日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一这是一条Debug日志这是一条D" +
+                                "这是一条Debug日志这是一条Debug日志这是一\"这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是" +
+                                "一条Debug日志这是一这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志这是一条Debug日志$it"
+                    )
                     delay(500)
                 }
             }
@@ -66,11 +66,11 @@ class MainActivity : AppCompatActivity(), SLog.SLogListener {
 
         findViewById<View>(R.id.addLogWithFile).setOnClickListener {
             launch {
-                SLog.getInstance().logFile(VERBOSE,"logWithFile","这是一条错误VERBOSE日志")
-                SLog.getInstance().logFile(DEBUG,"logWithFile","这是一条错误DEBUG日志")
-                SLog.getInstance().logFile(INFO,"logWithFile","这是一条错误INFO日志")
-                SLog.getInstance().logFile(WARN,"logWithFile","这是一条错误WARN日志")
-                SLog.getInstance().logFile(ERROR,"logWithFile","这是一条错误ERROR日志")
+                SLog.getInstance().logFile(VERBOSE, "logWithFile", "这是一条错误VERBOSE日志")
+                SLog.getInstance().logFile(DEBUG, "logWithFile", "这是一条错误DEBUG日志")
+                SLog.getInstance().logFile(INFO, "logWithFile", "这是一条错误INFO日志")
+                SLog.getInstance().logFile(WARN, "logWithFile", "这是一条错误WARN日志")
+                SLog.getInstance().logFile(ERROR, "logWithFile", "这是一条错误ERROR日志")
             }
         }
         SLog.getInstance().addLogListener(this)

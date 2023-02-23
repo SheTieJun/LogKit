@@ -32,6 +32,7 @@ import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.regex.Pattern
 import me.shetj.logkit.R
+import me.shetj.logkit.R.string
 import me.shetj.logkit.SLog
 import me.shetj.logkit.utils.lineString
 import me.shetj.logkit.utils.shareFile
@@ -58,7 +59,7 @@ internal class LogDesActivity : AppCompatActivity(), SLog.SLogListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_des)
         val filePath = intent.getStringExtra("file")
-        supportActionBar?.title = "日志详情"
+        supportActionBar?.title = getString(string.string_title_log_des)
         if (filePath.isNullOrEmpty()) {
             finish()
             return
@@ -66,7 +67,7 @@ internal class LogDesActivity : AppCompatActivity(), SLog.SLogListener {
         val file = File(filePath)
         supportActionBar?.subtitle = file.name
         if (!file.exists()) {
-            Toast.makeText(this, "文件不存在", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(string.string_file_no_exists), Toast.LENGTH_LONG).show()
             finish()
         }
         logDes = findViewById(R.id.log_des)

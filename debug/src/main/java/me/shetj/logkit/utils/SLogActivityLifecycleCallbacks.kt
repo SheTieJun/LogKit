@@ -6,6 +6,7 @@ import android.os.Bundle
 import me.shetj.logkit.SLog
 
 /**
+ * Used to automatically hide logos
  * 用来自动隐藏logo
  * @constructor Create empty S log activity lifecycle callbacks
  */

@@ -16,6 +16,7 @@ import me.shetj.logkit.R
 import me.shetj.logkit.R.array
 import me.shetj.logkit.R.id
 import me.shetj.logkit.R.layout
+import me.shetj.logkit.R.string
 import me.shetj.logkit.SLog
 import me.shetj.logkit.SLog.SLogListener
 import me.shetj.logkit.adapter.BaseAdapter
@@ -27,15 +28,15 @@ internal class LogFilesActivity : AppCompatActivity(), SLogListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_log_files)
-        supportActionBar?.title = "日志文件管理"
-        supportActionBar?.subtitle = "大于7天的日志已自动删除"
+        supportActionBar?.title = getString(string.title_log)
+        supportActionBar?.subtitle = getString(string.sub_title_log)
         SLog.getInstance().autoClearLogFile()
         findViewById<RecyclerView>(id.recycleView).apply {
             layoutManager = LinearLayoutManager(this@LogFilesActivity)
             adapter = object : BaseAdapter<LogFileInfo>(layout.item_logfile, SLog.getInstance().getSaveLogs()) {
                 override fun convert(holder: BaseViewHolder, data: LogFileInfo) {
                     holder.setText(R.id.title, data.name)
-                    holder.setText(R.id.last_update_time,"最后更新："+data.time)
+                    holder.setText(R.id.last_update_time,context.getString(string.string_last_update)+data.time)
                 }
 
             }.apply {
@@ -54,22 +55,22 @@ internal class LogFilesActivity : AppCompatActivity(), SLogListener {
                     )
                     builder.setAdapter(arrayAdapter) { _, selectedIndex ->
                         when(priorityList[selectedIndex]){
-                            "Open File"->{
+                            context.getString(string.string_open_file)->{
                                 LogDesActivity.start(this@LogFilesActivity, item.file)
                             }
-                            "Delete File" ->{
+                            context.getString(string.string_del_file) ->{
                                 AlertDialog.Builder(this@LogFilesActivity)
-                                    .setTitle("是否删除该日志")
-                                    .setNegativeButton("确定") { _, _ ->
+                                    .setTitle(context.getString(string.string_title_del_log))
+                                    .setNegativeButton(context.getString(string.string_sure)) { _, _ ->
                                         File(item.file).delete()
                                         adapter.data.removeAt(position)
                                         adapter.notifyItemRemoved(position)
                                     }
-                                    .setPositiveButton("取消") { dialog, _ ->
+                                    .setPositiveButton(context.getString(string.string_cancel)) { dialog, _ ->
                                         dialog.cancel()
                                     }.show()
                             }
-                            "Share File" ->{
+                            context.getString(string.string_share_file) ->{
                                 shareFile(item.name,item.file)
                             }
                             else ->{}

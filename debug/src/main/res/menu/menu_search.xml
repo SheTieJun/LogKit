@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menuSearch"
-        android:title="搜索"
+        android:title="@string/string_search"
         app:showAsAction="never" />
     <item
         android:id="@+id/menuShare"
-        android:title="分享"
+        android:title="@string/string_share"
         app:showAsAction="never" />
 </menu>

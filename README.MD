@@ -3,13 +3,13 @@
 - 文件日志输出、分享到其他应用
 - 实时可视化界面
 - 日志过滤
-- 监测前后自动隐藏悬浮窗
+- 监测前后台变化自动隐藏悬浮窗
 
 ## 初始化
 
 ```kotlin
 
-SLog.init(this)
+SLog.init(this) //必须主线程初始化
 
 ```
 
@@ -33,7 +33,7 @@ SLog.v("这是一条日志日志日志")
 
 ### 方式二（推荐）
 
-SLog + Timber,使用下面的方式就可以自动在输入日志的是同步到SLog
+#### 输出日志 SLog + Timber 
 
 ```Kotlin
 class SLogTree : Timber.Tree() {
@@ -58,7 +58,7 @@ class SLogTree : Timber.Tree() {
 Timber.plant(SLogTree())
 ```
 
-### 拦截网络请求
+#### 输出网络请求 SLog + HttpSLogInterceptor
 
 SLog + [HttpSLogInterceptor](app/src/main/java/me/shetj/logkit/HttpSLogInterceptor.kt),达到输出网络请求
 
@@ -67,19 +67,19 @@ SLog + [HttpSLogInterceptor](app/src/main/java/me/shetj/logkit/HttpSLogIntercept
 ```kotlin
 SLog.getInstance().logFile(VERBOSE, "logFile", "这是一条错误VERBOSE日志")
 ```
-
-## 自动检测前后台变化，隐藏日志相关悬浮窗
-
-```groovy
-//true 开启，false 关闭
-SLog.getInstance().autoHide(context, true)
-```
-
 文件命名：`[TAG]MM-dd HH时mm分`
 
 > 按TAG和每分钟进行输出文件，方便查找
 >
 > 所以需要合理使用TAG,进行日志文件输出
+
+
+## 自动检测前后台变化，隐藏日志相关悬浮窗，默认开启
+
+```groovy
+//true 开启，false 关闭
+SLog.getInstance().autoHide(context, true)
+```
 
 ## 效果图片
 

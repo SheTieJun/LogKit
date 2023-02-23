@@ -27,6 +27,22 @@
     <color name="editTextColorHint">#7735383F</color>
     <string name="select_priority">All</string>
     <string name="close_tip">Close Log</string>
+    <string name="string_title_log_des">Log details</string>
+    <string name="string_file_no_exists">file no exist</string>
+    <string name="string_title_del_log">delete the log ?</string>
+    <string name="string_sure">Sure</string>
+    <string name="string_cancel">Cancel</string>
+    <string name="sub_title_log">Auto del logs older than 7 days</string>
+    <string name="title_log">Log file management</string>
+    <string name="string_last_update">Last updated：</string>
+    <string name="string_open_file">Open File</string>
+    <string name="string_del_file">Delete File</string>
+    <string name="string_share_file">Share File</string>
+    <string name="string_exit">Exit SLog</string>
+    <string name="string_open_files">Open Log Files</string>
+    <string name="string_clear_files">Clear Log Files</string>
+    <string name="string_search">search</string>
+    <string name="string_share">share</string>
 
     <!--    <color name="log_errorColor">#E64A19</color>-->
 <!--    <color name="log_warnColor">#FFC107</color>-->

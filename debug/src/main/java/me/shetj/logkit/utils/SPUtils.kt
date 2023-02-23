@@ -1,26 +1,3 @@
-/*
- * MIT License
- *
- * Copyright (c) 2019 SheTieJun
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 package me.shetj.logkit.utils
 
 import android.content.Context
@@ -35,18 +12,8 @@ internal class SPUtils {
 
     companion object {
 
-        /**
-         * 保存在手机里面的文件名
-         */
         private const val FILE_NAME = "slog_data"
 
-        /**
-         * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
-         *
-         * @param context
-         * @param key
-         * @param object
-         */
         @JvmStatic
         fun put(context: Context, key: String, `object`: Any) {
 
@@ -66,14 +33,6 @@ internal class SPUtils {
             editor.apply()
         }
 
-        /**
-         * 得到保存数据的方法，我们根据默认值得到保存的数据的具体类型，然后调用相对于的方法获取值
-         *
-         * @param context
-         * @param key
-         * @param defaultObject
-         * @return
-         */
         @JvmStatic
         fun get(context: Context, key: String, defaultObject: Any): Any? {
             val sp = context.getSharedPreferences(

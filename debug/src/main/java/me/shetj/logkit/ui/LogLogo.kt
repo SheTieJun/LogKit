@@ -26,6 +26,7 @@ import com.google.android.material.badge.BadgeDrawable.*
 import me.shetj.logkit.R
 import me.shetj.logkit.R.array
 import me.shetj.logkit.R.drawable
+import me.shetj.logkit.R.string
 import me.shetj.logkit.SLog
 import me.shetj.logkit.floatview.BaseFloatView
 import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
@@ -74,13 +75,13 @@ internal class LogLogo @JvmOverloads constructor(
                 )
                 builder.setAdapter(arrayAdapter) { _, selectedIndex ->
                      when(priorityList[selectedIndex]){
-                         "Exit SLog" ->{
+                         context.getString(string.string_exit) ->{
                              SLog.getInstance().stop()
                          }
-                         "Open Log Files" ->{
+                         context.getString(string.string_open_files) ->{
                              SLog.getInstance().startLogsActivity()
                          }
-                         "Clear Log Files"->{
+                         context.getString(string.string_clear_files)->{
                              SLog.getInstance().clearLogFile()
                          }
                          else ->{}
@@ -139,11 +140,11 @@ internal class LogLogo @JvmOverloads constructor(
     fun showChatAnim() {
         animate().scaleX(0.9f).scaleY(0.9f).start()
         addToWindowManager { }
-        needUpdatePosition()
+        needTouchUpdatePosition()
     }
 
     fun hideChatAnim() {
         animate().scaleX(1f).scaleY(1f).start()
-        needUpdatePosition()
+        needTouchUpdatePosition()
     }
 }

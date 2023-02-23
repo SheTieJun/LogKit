@@ -29,6 +29,7 @@ import me.shetj.logkit.ui.LogFilesActivity
 import me.shetj.logkit.ui.LogLogo
 import me.shetj.logkit.utils.SLogActivityLifecycleCallbacks
 import me.shetj.logkit.utils.SPUtils
+import me.shetj.logkit.utils.isMainThread
 import me.shetj.logkit.utils.lineString
 
 /**
@@ -61,6 +62,9 @@ class SLog private constructor() {
         @JvmStatic
         @MainThread
         fun init(context: Context): SLog {
+            if (!isMainThread()){
+                error("请在主线程调用`SLog.init`")
+            }
             return getInstance().also {
                 it.initContext(context)
             }

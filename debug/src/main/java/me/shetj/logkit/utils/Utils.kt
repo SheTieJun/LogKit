@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Bitmap.Config.ARGB_8888
 import android.graphics.Bitmap.Config.RGB_565
@@ -13,29 +12,11 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Looper
 import androidx.core.content.FileProvider
 import java.io.File
 
 internal object Utils {
-
-    private var density = -1f
-
-    private fun getDensity(): Float {
-        if (density <= 0f) {
-            density = Resources.getSystem().displayMetrics.density
-        }
-        return density
-    }
-
-    @JvmStatic
-    fun dp2px(dpValue: Float): Int {
-        return (dpValue * getDensity() + 0.5f).toInt()
-    }
-
-    @JvmStatic
-    fun px2dp(pxValue: Float): Int {
-        return (pxValue / getDensity() + 0.5f).toInt()
-    }
 
     @Suppress("DEPRECATION")
     @JvmStatic
@@ -88,4 +69,9 @@ private fun createShareIntent(url: Uri): Intent {
     shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     return shareIntent
+}
+
+
+internal fun isMainThread(): Boolean {
+    return Looper.getMainLooper().thread === Thread.currentThread()
 }

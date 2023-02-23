@@ -112,7 +112,7 @@ internal class LogChat @JvmOverloads constructor(
         return super.dispatchKeyEvent(event)
     }
 
-    override fun needUpdatePosition(): Boolean {
+    override fun needTouchUpdatePosition(): Boolean {
         return false
     }
 

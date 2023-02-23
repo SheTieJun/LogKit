@@ -15,7 +15,6 @@ import me.shetj.logkit.LogLevel.WARN
 import me.shetj.logkit.R
 import me.shetj.logkit.model.LogModel
 import me.shetj.logkit.R.drawable
-import me.shetj.logkit.R.id
 import me.shetj.logkit.R.layout
 import me.shetj.logkit.adapter.SlogAdapter.LogViewHolder
 import me.shetj.logkit.getLogPriorityInitials
@@ -65,7 +64,8 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
                 holder.logMessage.setTextColor(debugColor)
             }
         }
-        holder.logTag.text = getLogPriorityInitials(model.logLevel) + "/" + model.tag + ": "
+        val levelAndTag = getLogPriorityInitials(model.logLevel) + "/" + model.tag + ": "
+        holder.logTag.text = levelAndTag
         val isExpanded = position == mExpandedPosition
         holder.logMessage.text = model.logMessage
         if (isExpanded){
@@ -94,8 +94,7 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
     override fun onBindViewHolder(holder: LogViewHolder, position: Int, payloads: MutableList<Any>) {
         super.onBindViewHolder(holder, position, payloads)
         val model = mFilteredLogList!![position]
-        val priority = model.logLevel
-        when (priority) {
+        when (model.logLevel) {
             ERROR -> {
                 holder.logTag.setTextColor(errorColor)
                 holder.logMessage.setTextColor(errorColor)
@@ -117,7 +116,8 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
                 holder.logMessage.setTextColor(debugColor)
             }
         }
-        holder.logTag.text = getLogPriorityInitials(model.logLevel) + "/" + model.tag + ": "
+        val levelAndTag = getLogPriorityInitials(model.logLevel) + "/" + model.tag + ": "
+        holder.logTag.text = levelAndTag
         val isExpanded = position == mExpandedPosition
         holder.logMessage.text = model.logMessage
         if (isExpanded){
@@ -145,10 +145,10 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
         var copy: ImageView
 
         init {
-            logTag = itemView.findViewById(id.log_tag)
-            logMessage = itemView.findViewById(id.log_message)
-            logTime = itemView.findViewById(id.log_time)
-            expandCollapseArrow = itemView.findViewById(id.arrow_img)
+            logTag = itemView.findViewById(R.id.log_tag)
+            logMessage = itemView.findViewById(R.id.log_message)
+            logTime = itemView.findViewById(R.id.log_time)
+            expandCollapseArrow = itemView.findViewById(R.id.arrow_img)
             copy = itemView.findViewById(R.id.copy)
         }
     }
@@ -156,10 +156,6 @@ internal class SlogAdapter : RecyclerView.Adapter<LogViewHolder>() {
     fun addLogs(logs: List<LogModel>?) {
         mFilteredLogList = logs
         notifyDataSetChanged()
-    }
-
-    companion object {
-        private val TAG = SlogAdapter::class.java.simpleName
     }
 
     init {

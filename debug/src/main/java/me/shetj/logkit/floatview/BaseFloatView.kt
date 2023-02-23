@@ -23,6 +23,7 @@
  */
 package me.shetj.logkit.floatview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
@@ -34,6 +35,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
+import androidx.annotation.UiThread
 import me.shetj.logkit.ui.LogLogo
 import me.shetj.logkit.utils.SPUtils
 import me.shetj.logkit.floatview.FloatKit.checkFloatPermission
@@ -79,6 +81,7 @@ internal abstract class BaseFloatView : FrameLayout {
      */
     abstract fun initView(context: Context)
 
+    @UiThread
     open fun addToWindowManager(layout: WindowManager.LayoutParams.() -> Unit) {
         if (context.checkFloatPermission()) {
             if (winManager == null) {
@@ -101,6 +104,7 @@ internal abstract class BaseFloatView : FrameLayout {
         winManager?.addView(this, windowParams)
     }
 
+    @UiThread
     open fun removeForWindowManager() {
         if (isAttach){
             winManager?.removeView(this)
@@ -111,7 +115,8 @@ internal abstract class BaseFloatView : FrameLayout {
     /**
      * 给当前界面设置的view设置点击事件，不点击的时候，会滑动
      */
-    fun View.setViewClickInFloat(onClickListener: OnClickListener? = null,onLongClickListener: OnLongClickListener?=null) {
+    @SuppressLint("ClickableViewAccessibility")
+    fun View.setViewClickInFloat(onClickListener: OnClickListener? = null, onLongClickListener: OnLongClickListener?=null) {
         setOnClickListener(onClickListener)
         setOnLongClickListener(onLongClickListener)
         val mGestureListener = object : SimpleOnGestureListener() {
@@ -166,13 +171,13 @@ internal abstract class BaseFloatView : FrameLayout {
         return true
     }
 
-    open fun needUpdatePosition(): Boolean {
+    open fun needTouchUpdatePosition(): Boolean {
         return true
     }
 
 
     private fun updateViewPosition() {
-        if (needUpdatePosition()) {
+        if (needTouchUpdatePosition()) {
             val x = (mXInScreen - mXInView).toInt()
             val y = (mYInScreen - mYInView).toInt()
             windowParams?.x = x
