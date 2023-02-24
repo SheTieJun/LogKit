@@ -26,7 +26,6 @@
     <color name="editTextColor">#35383F</color>
     <color name="editTextColorHint">#7735383F</color>
     <string name="select_priority">All</string>
-    <string name="close_tip">Close Log</string>
     <string name="string_title_log_des">日志详情</string>
     <string name="string_file_no_exists">文件不存在</string>
     <string name="string_title_del_log">是否删除该日志</string>
@@ -43,6 +42,7 @@
     <string name="string_clear_files">清空日志文件</string>
     <string name="string_search">搜索</string>
     <string name="string_share">分享</string>
+    <string name="string_search_text">搜索文本</string>
 
 
 </resources>

@@ -265,11 +265,7 @@ class SLog private constructor() {
         log: String,
         isCall: Boolean = true
     ) {
-        val logModel = LogModel(getLogLevelByInt(priority), tag, log, nowTs())
-        if (isCall) {
-            feed(logModel)
-        }
-        saveLogToFile(logModel)
+        logFile(getLogLevelByInt(priority),tag, log, isCall)
     }
 
     /**

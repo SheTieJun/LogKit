@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:animateLayoutChanges="true"
-    tools:context="me.shetj.logkit.LogDesActivity">
+    tools:context="me.shetj.logkit.ui.LogDesActivity">
 
     <LinearLayout
         android:id="@+id/search_root"
@@ -28,7 +28,7 @@
             android:paddingEnd="8dp"
             android:cursorVisible="true"
             android:textCursorDrawable="@null"
-            android:hint="Search text"
+            android:hint="@string/string_search_text"
             android:background="@drawable/input_rounded"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

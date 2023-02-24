@@ -26,7 +26,6 @@
     <color name="editTextColor">#35383F</color>
     <color name="editTextColorHint">#7735383F</color>
     <string name="select_priority">All</string>
-    <string name="close_tip">Close Log</string>
     <string name="string_title_log_des">Log details</string>
     <string name="string_file_no_exists">file no exist</string>
     <string name="string_title_del_log">delete the log ?</string>
@@ -43,11 +42,6 @@
     <string name="string_clear_files">Clear Log Files</string>
     <string name="string_search">search</string>
     <string name="string_share">share</string>
-
-    <!--    <color name="log_errorColor">#E64A19</color>-->
-<!--    <color name="log_warnColor">#FFC107</color>-->
-<!--    <color name="log_infoColor">#4CAF50</color>-->
-<!--    <color name="log_defaultColor">#34363A</color>-->
-<!--    <color name="log_debugColor">#1976D2</color>-->
+    <string name="string_search_text">Search text</string>
 
 </resources>

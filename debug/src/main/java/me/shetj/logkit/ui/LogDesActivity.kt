@@ -44,6 +44,8 @@ internal class LogDesActivity : AppCompatActivity(), SLog.SLogListener {
     private var searchRoot: View? = null
     private var sourceStr: String = ""
     private var autoHideLiveData = MutableLiveData<Boolean>()
+    private var contentLiveDate = MutableLiveData<String>()
+    private var lastHigh :String ?= null
 
     companion object {
         fun start(context: Context, file: String) {
@@ -74,9 +76,12 @@ internal class LogDesActivity : AppCompatActivity(), SLog.SLogListener {
         searchRoot = findViewById(R.id.search_root)
         val editText = findViewById<EditText>(R.id.editText)
 
-        editText.asTextLiveData().throttleLast(200).observe(this) {
+        editText.asTextLiveData().throttleLast(500).observe(this) {
             autoHideLiveData.postValue(false)
-            searchHighlight(logDes!!.text.toString(), editText.text.toString())
+            if (lastHigh != it){
+                lastHigh = it
+                searchHighlight(logDes!!.text.toString(), it)
+            }
         }
 
         autoHideLiveData.throttleLast(30000).observe(this) {
@@ -85,14 +90,14 @@ internal class LogDesActivity : AppCompatActivity(), SLog.SLogListener {
                 windowInsetsController?.hide(WindowInsetsCompat.Type.ime())
             }
         }
-
+        contentLiveDate.throttleLast(500).observe(this){
+            logDes!!.text = it
+        }
         ArchTaskExecutor.getIOThreadExecutor().execute {
             file.forEachLine {
-                runOnUiThread {
-                    logDes?.append(it + lineString)
-                }
+                sourceStr = sourceStr + it + lineString
+                contentLiveDate.postValue(sourceStr)
             }
-            sourceStr = logDes?.text.toString()
         }
         SLog.getInstance().addLogListener(this)
     }
@@ -113,7 +118,7 @@ internal class LogDesActivity : AppCompatActivity(), SLog.SLogListener {
                 }
             }
             R.id.menuShare -> {
-                shareFile(title.toString(),intent.getStringExtra("file"))
+                shareFile(title.toString(), intent.getStringExtra("file"))
             }
         }
         return super.onOptionsItemSelected(item)
